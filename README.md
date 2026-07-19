@@ -1,160 +1,217 @@
-<div align="center">
+# LifeBeacon
 
-# 🚑 LifeBeacon
+**LifeBeacon** is a team graduation project that presents an AI-powered personal nutrition and wellness platform. The system is designed to generate a personalized daily roadmap for meals, hydration, activity, and healthy habits based on the user's profile, lifestyle, health information, progress, and optional InBody data.
 
-### *Your Beacon in Every Emergency*
-
-A full-stack emergency management system built with **Spring Boot**, **Tailwind CSS**, and **MySQL**.
-
-![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-6DB33F?style=for-the-badge)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge)
-
-</div>
+> This repository represents a collaborative **team project**. The application features, backend architecture, database, AI integration, and frontend pages are developed and maintained by the project team.
 
 ---
 
-# 🌟 About LifeBeacon
+## Project Overview
 
-LifeBeacon is a full-stack web application that enables users to quickly report emergencies through a simple and secure platform. Users can register, log in, manage their profiles, and create, edit, or delete emergency requests with an intuitive and responsive interface.
+Many wellness applications require users to manually log every meal and repeatedly interpret their own numbers. LifeBeacon follows a different approach: it prepares a structured daily roadmap that helps the user understand what to eat, when to drink water, when to exercise, and how to stay aligned with personal goals.
 
-The project demonstrates modern Java web development using Spring Boot and follows the MVC architecture while providing a clean user experience built with Tailwind CSS.
-
----
-
-# ✨ Features
-
-* 🔐 Secure User Registration & Login
-* 👤 User Profile Management
-* ✏️ Edit User Information
-* 🚑 Create Emergency Requests
-* 📋 View Personal Emergency Requests
-* 📝 Update Emergency Requests
-* 🗑️ Delete Emergency Requests
-* 🔒 Session-Based Authentication
-* 🔑 BCrypt Password Encryption
-* ✅ Server-Side Validation
-* 📱 Responsive User Interface
+The project is intended as a wellness support platform and does not replace professional medical diagnosis or treatment.
 
 ---
 
-# 🛠️ Technologies Used
+## Main Features
+
+- AI-generated daily wellness roadmap
+- Timed meal recommendations
+- Hydration schedule
+- Workout and movement schedule
+- Calories and macronutrient progress
+- Weight trend tracking
+- Optional InBody report support
+- Health onboarding wizard
+- Health-aware recommendations
+- Deterministic allergy filtering
+- MealCircle group meal planning
+- Local food and restaurant intelligence
+- Arabic and English interface support
+- Email verification and password recovery
+- WhatsApp roadmap reminders
+- Responsive dashboard and landing page
+
+---
+
+## Frontend Pages Included in This Contribution
+
+### Landing Page
+
+The landing page introduces the LifeBeacon platform and includes:
+
+- Navigation bar
+- Hero section
+- Product overview
+- Main features
+- How LifeBeacon works
+- MealCircle section
+- Wellness safety notice
+- Contact Us section
+- Call-to-action section
+- Footer
+
+The Contact Us area is currently a frontend-only information section without a form or backend submission.
+
+### Dashboard
+
+The dashboard frontend includes:
+
+- Daily greeting and progress status
+- Calories progress
+- Hydration progress
+- Macronutrients progress
+- Today's roadmap timeline
+- Completed and upcoming roadmap items
+- Weight trend card
+- Body composition card
+- AI insight card
+- Responsive layout
+
+The displayed dashboard values are currently static frontend placeholders. The backend team can later replace them with JSP Expression Language values received from Spring MVC controllers.
+
+---
+
+## Technology Stack
 
 ### Backend
 
-* Java 21
-* Spring Boot
-* Spring MVC
-* Spring Data JPA
-* Hibernate
-* Spring Validation
-
-### Frontend
-
-* JSP
-* JSTL
-* HTML5
-* Tailwind CSS
+- Java
+- Spring Boot
+- Spring MVC
+- Spring Security
+- Spring Data JPA
+- Hibernate
 
 ### Database
 
-* MySQL
+- MySQL
 
-### Build Tool
+### Frontend
 
-* Maven
+- JSP
+- HTML5
+- Tailwind CSS via CDN
+- Vanilla JavaScript
+- Lucide Icons
+
+### Planned Integrations
+
+- Gemini AI
+- SendGrid
+- WhatsApp Business API
+
+---
+---
+
+## JSP View Configuration
+
+Add the following configuration to `src/main/resources/application.properties`:
+
+```properties
+spring.mvc.view.prefix=/WEB-INF/
+spring.mvc.view.suffix=.jsp
+```
+
+A Spring MVC controller can render the landing page and dashboard using:
+
+```java
+@Controller
+public class MainController {
+
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
+    }
+}
+```
 
 ---
 
-# 📂 Project Structure
+## Running the Project
+
+1. Clone the repository.
+2. Open the project in Eclipse STS.
+3. Configure the MySQL connection in `application.properties`.
+4. Update the Maven project.
+5. Run the project as a Spring Boot application.
+6. Open the following routes:
 
 ```text
-src
-├── main
-│   ├── java
-│   │   └── com.lifebeacon
-│   │       ├── controllers
-│   │       ├── models
-│   │       ├── repositories
-│   │       ├── services
-│   │       └── LifeBeaconApplication.java
-│   ├── resources
-│   ├── webapp
-│   │   ├── WEB-INF
-│   │   └── static
-│   └── pom.xml
+http://localhost:8080/
+http://localhost:8080/dashboard
 ```
 
 ---
 
-# 🚀 Getting Started
+## Example MySQL Configuration
 
-### Clone the repository
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/lifebeacon_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=YOUR_PASSWORD
 
-```bash
-git clone https://github.com/yourusername/LifeBeacon.git
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 ```
 
-### Navigate to the project
+Do not commit real database passwords, API keys, or private credentials to GitHub.
 
-```bash
-cd LifeBeacon
+---
+
+## Future Backend Integration
+
+The static dashboard values can later be replaced with JSP values such as:
+
+```jsp
+${currentUser.name}
+${roadmap.targetCalories}
+${roadmap.consumedCalories}
+${roadmap.waterTargetLiters}
+${latestInBody.weightKg}
 ```
 
-### Run the application
+Roadmap items can be displayed dynamically using JSTL:
 
-```bash
-mvn spring-boot:run
+```jsp
+<c:forEach var="item" items="${roadmapItems}">
+    <!-- roadmap item design -->
+</c:forEach>
 ```
 
-Or run **LifeBeaconApplication.java** directly from your IDE.
+---
+
+## Team Collaboration
+
+LifeBeacon is developed as a collaborative graduation project. Different team members contribute to areas such as:
+
+- Frontend design
+- Spring MVC controllers
+- Authentication and security
+- Database models and relationships
+- AI roadmap generation
+- InBody processing
+- MealCircle
+- Email and WhatsApp integration
+- Testing and documentation
+
+All project achievements should be presented as the work of the complete team.
 
 ---
 
-# 🎯 What I Learned
+## Safety Notice
 
-Throughout this project, I practiced and applied:
-
-* Spring Boot MVC Architecture
-* CRUD Operations
-* Authentication & Authorization
-* Session Management
-* Form Validation
-* Spring Data JPA & Hibernate
-* Repository-Service-Controller Design Pattern
-* MySQL Database Integration
-* Responsive UI Design using Tailwind CSS
+LifeBeacon provides wellness and lifestyle guidance only. It is not a medical device and must not be used as a replacement for professional medical advice, diagnosis, emergency care, or treatment.
 
 ---
 
-# 🔮 Future Improvements
+## License
 
-* 📧 Email Notifications
-* 📱 SMS Alerts
-* 📍 Live Location Sharing
-* 🗺️ Google Maps Integration
-* 🌐 REST API
-* 📲 Mobile Application
-* ⚡ Real-Time Emergency Status Updates
-
----
-
-# 👨‍💻 Developer
-
-**Murad Shaheen**
-
-Full Stack Development Trainee
-AXSOS Academy
-
----
-
-# 📄 License
-
-This project was developed for educational purposes as part of the AXSOS Academy Full Stack Development Bootcamp.
-
-<div align="center">
-
-**⭐ If you like this project, consider giving it a star! ⭐**
-
-</div>
+This project was created for educational and graduation-project purposes.
