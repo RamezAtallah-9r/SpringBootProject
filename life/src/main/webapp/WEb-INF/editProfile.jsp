@@ -5,134 +5,251 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Profile</title>
-
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Edit Health Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme:{extend:{
-                colors:{
-                    beacon:{50:"#f1fbf7",100:"#dcf5eb",600:"#21866f",700:"#1d6b5b"},
-                    primary:"#21866f",secondary:"#123047",background:"#F7FBF9",
-                    surface:"#FFFFFF",heading:"#123047",body:"#475569",
-                    danger:"#DC2626",border:"#E2E8F0"
-                },
-                borderRadius:{card:"2rem",button:"9999px"},
-                boxShadow:{card:"0 10px 30px rgba(18,48,71,.08)",button:"0 12px 24px rgba(33,134,111,.25)"}
-            }}
-        };
-    </script>
+
+    <style>
+        .step{display:none}
+        .step.active{display:block}
+        .field{width:100%;border:1px solid #e2e8f0;padding:.75rem;border-radius:.75rem}
+        .error{color:#ef4444;font-size:.875rem}
+    </style>
 </head>
 
-<body class="min-h-screen bg-background text-body">
+<body class="min-h-screen bg-slate-100 p-5">
 
-<div class="mx-auto max-w-4xl px-4 py-10">
+<main class="max-w-3xl mx-auto">
 
-    <div class="mb-8">
-        <p class="font-bold uppercase tracking-widest text-beacon-600">LifeBeacon</p>
-        <h1 class="mt-2 text-4xl font-black text-heading">Edit Profile</h1>
-        <p class="mt-2">Update your health and lifestyle information.</p>
+    <div class="flex justify-between mb-5">
+        <div>
+            <h1 class="text-3xl font-bold">Edit Health Profile</h1>
+            <p class="text-gray-500">Update your personal health information</p>
+        </div>
+
+        <a href="/profile" class="bg-white border px-5 py-3 rounded-xl">
+            Cancel
+        </a>
     </div>
 
-    <%-- Existing profile values are automatically displayed --%>
-    <form:form action="${pageContext.request.contextPath}/profile/edit"
-               method="post" modelAttribute="profile"
-               class="rounded-card border border-border bg-surface p-7 shadow-card">
+    <div class="bg-white rounded-3xl p-6 shadow-sm">
 
-        <div class="grid gap-5 md:grid-cols-2">
+        <div class="grid grid-cols-4 text-center mb-8">
+            <p class="indicator font-bold">1<br>Basics</p>
+            <p class="indicator text-gray-400">2<br>Routine</p>
+            <p class="indicator text-gray-400">3<br>Medical</p>
+            <p class="indicator text-gray-400">4<br>Goals</p>
+        </div>
 
-            <div>
-                <form:label path="age" class="font-bold text-heading">Age</form:label>
-                <form:input path="age" type="number"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3"/>
-                <form:errors path="age" class="text-sm font-bold text-danger"/>
-            </div>
+        <form:form action="/profile/edit" method="post"
+                   modelAttribute="profile"
+                   enctype="multipart/form-data">
 
-            <div>
-                <form:label path="gender" class="font-bold text-heading">Gender</form:label>
-                <form:select path="gender"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3">
-                    <form:option value="Male" label="Male"/>
-                    <form:option value="Female" label="Female"/>
-                    <form:option value="Other" label="Other"/>
+            <input type="hidden" name="_method" value="put">
+            <form:hidden path="id"/>
+
+            <!-- Step 1 -->
+            <section class="step active">
+                <h2 class="text-2xl font-bold mb-5">Physical Foundations</h2>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label>Age</label>
+                        <form:input path="age" type="number" class="field"/>
+                        <form:errors path="age" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>Blood Type</label>
+                        <form:select path="bloodType" class="field">
+                            <form:option value="">Select</form:option>
+                            <form:options items="${['A+','A-','B+','B-','AB+','AB-','O+','O-']}"/>
+                        </form:select>
+                        <form:errors path="bloodType" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>Height (cm)</label>
+                        <form:input path="height" type="number" step="0.1" class="field"/>
+                        <form:errors path="height" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>Current Weight (kg)</label>
+                        <form:input path="currentWeight" type="number" step="0.1" class="field"/>
+                        <form:errors path="currentWeight" class="error"/>
+                    </div>
+                </div>
+
+                <p class="mt-4">Gender</p>
+
+                <div class="flex gap-5 mt-2">
+                    <label><form:radiobutton path="gender" value="Male"/> Male</label>
+                    <label><form:radiobutton path="gender" value="Female"/> Female</label>
+                    <label><form:radiobutton path="gender" value="Other"/> Other</label>
+                </div>
+
+                <form:errors path="gender" class="error"/>
+
+                <div class="text-right mt-7">
+                    <button type="button" onclick="nextStep()" class="next">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 2 -->
+            <section class="step">
+                <h2 class="text-2xl font-bold mb-5">Daily Routine</h2>
+
+                <div class="grid md:grid-cols-2 gap-4">
+
+                    <div>
+                        <label>Activity Level</label>
+                        <form:select path="activityLevel" class="field">
+                            <form:option value="">Select</form:option>
+                            <form:option value="Sedentary">Sedentary</form:option>
+                            <form:option value="Lightly Active">Lightly Active</form:option>
+                            <form:option value="Moderately Active">Moderately Active</form:option>
+                            <form:option value="Very Active">Very Active</form:option>
+                        </form:select>
+                        <form:errors path="activityLevel" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>Occupation</label>
+                        <form:input path="occupation" class="field"/>
+                        <form:errors path="occupation" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>City</label>
+                        <form:input path="city" class="field"/>
+                        <form:errors path="city" class="error"/>
+                    </div>
+
+                    <div>
+                        <label>Work Start</label>
+                        <form:input path="workStart" type="time" class="field"/>
+                    </div>
+
+                    <div>
+                        <label>Work End</label>
+                        <form:input path="workEnd" type="time" class="field"/>
+                    </div>
+
+                    <div>
+                        <label>Bedtime</label>
+                        <form:input path="bedtime" type="time" class="field"/>
+                    </div>
+
+                    <div>
+                        <label>Wake-up Time</label>
+                        <form:input path="wakeUpTime" type="time" class="field"/>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" onclick="backStep()" class="back">Back</button>
+                    <button type="button" onclick="nextStep()" class="next">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 3 -->
+            <section class="step">
+                <h2 class="text-2xl font-bold mb-5">Medical Context</h2>
+
+                <label>Pregnancy Status</label>
+                <form:select path="pregnancyStatus" class="field mb-4">
+                    <form:option value="">Select</form:option>
+                    <form:option value="None">None</form:option>
+                    <form:option value="Pregnant">Pregnant</form:option>
+                    <form:option value="Breastfeeding">Breastfeeding</form:option>
+                    <form:option value="Not Applicable">Not Applicable</form:option>
                 </form:select>
-            </div>
 
-            <div>
-                <form:label path="heightCm" class="font-bold text-heading">Height (cm)</form:label>
-                <form:input path="heightCm" type="number" step="0.1"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3"/>
-            </div>
+                <label>Dietary Allergies</label>
+                <form:textarea path="dietaryAllergies" rows="3" class="field mb-4"/>
+                <form:errors path="dietaryAllergies" class="error"/>
 
-            <div>
-                <form:label path="weightKg" class="font-bold text-heading">Weight (kg)</form:label>
-                <form:input path="weightKg" type="number" step="0.1"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3"/>
-            </div>
+                <label>Chronic Diseases</label>
+                <form:textarea path="chronicDiseases" rows="3" class="field mb-4"/>
+                <form:errors path="chronicDiseases" class="error"/>
 
-            <div>
-                <form:label path="goal" class="font-bold text-heading">Health Goal</form:label>
-                <form:select path="goal"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3">
-                    <form:option value="Weight Loss" label="Weight Loss"/>
-                    <form:option value="Weight Gain" label="Weight Gain"/>
-                    <form:option value="Maintain Weight" label="Maintain Weight"/>
-                    <form:option value="Improve Health" label="Improve Health"/>
+                <label class="flex gap-3">
+                    <form:checkbox path="strictHardBlock"/>
+                    Enable Strict Hard Block
+                </label>
+
+                <div class="buttons">
+                    <button type="button" onclick="backStep()" class="back">Back</button>
+                    <button type="button" onclick="nextStep()" class="next">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 4 -->
+            <section class="step">
+                <h2 class="text-2xl font-bold mb-5">Health Goals</h2>
+
+                <label>Primary Goal</label>
+                <form:select path="primaryGoal" class="field mb-4">
+                    <form:option value="">Select</form:option>
+                    <form:option value="Weight Loss">Weight Loss</form:option>
+                    <form:option value="Maintenance">Maintenance</form:option>
+                    <form:option value="Muscle Gain">Muscle Gain</form:option>
                 </form:select>
-            </div>
+                <form:errors path="primaryGoal" class="error"/>
 
-            <div>
-                <form:label path="activityLevel" class="font-bold text-heading">Activity Level</form:label>
-                <form:select path="activityLevel"
-                    class="mt-2 w-full rounded-2xl border border-border px-4 py-3">
-                    <form:option value="Sedentary" label="Sedentary"/>
-                    <form:option value="Light" label="Light"/>
-                    <form:option value="Moderate" label="Moderate"/>
-                    <form:option value="High" label="High"/>
-                </form:select>
-            </div>
-        </div>
+                <label>Target Weight (kg)</label>
+                <form:input path="targetWeight" type="number"
+                            step="0.1" class="field mb-4"/>
+                <form:errors path="targetWeight" class="error"/>
 
-        <h2 class="mb-4 mt-8 text-xl font-black text-heading">Medical Information</h2>
+                <label>Replace InBody Report</label>
+                <form:input path="inBodyFile" type="file"
+                            accept=".pdf,.jpg,.jpeg,.png" class="field"/>
 
-        <div class="grid gap-5 md:grid-cols-2">
-            <form:textarea path="diseases" rows="3" placeholder="Diseases"
-                class="rounded-2xl border border-border p-4"/>
-            <form:textarea path="allergies" rows="3" placeholder="Allergies"
-                class="rounded-2xl border border-border p-4"/>
-            <form:textarea path="medications" rows="3" placeholder="Medications"
-                class="rounded-2xl border border-border p-4"/>
-            <form:textarea path="injuries" rows="3" placeholder="Injuries"
-                class="rounded-2xl border border-border p-4"/>
-        </div>
+                <div class="buttons">
+                    <button type="button" onclick="backStep()" class="back">Back</button>
+                    <button type="submit" class="next">Save Changes</button>
+                </div>
+            </section>
 
-        <h2 class="mb-4 mt-8 text-xl font-black text-heading">Lifestyle and Food</h2>
+        </form:form>
+    </div>
+</main>
 
-        <div class="grid gap-5 md:grid-cols-2">
-            <form:input path="sleepHours" type="number" step="0.5" placeholder="Sleep hours"
-                class="rounded-2xl border border-border px-4 py-3"/>
-            <form:input path="waterGoalGlasses" type="number" placeholder="Water glasses"
-                class="rounded-2xl border border-border px-4 py-3"/>
-            <form:textarea path="favoriteFoods" rows="3" placeholder="Favorite foods"
-                class="rounded-2xl border border-border p-4"/>
-            <form:textarea path="dislikedFoods" rows="3" placeholder="Disliked foods"
-                class="rounded-2xl border border-border p-4"/>
-        </div>
+<style>
+    .buttons{@apply flex justify-between mt-7}
+    .next{@apply bg-slate-900 text-white px-7 py-3 rounded-xl}
+    .back{@apply border px-7 py-3 rounded-xl}
+</style>
 
-        <div class="mt-8 flex gap-4">
-            <a href="${pageContext.request.contextPath}/profile"
-               class="flex-1 rounded-button border border-border px-6 py-3 text-center font-bold text-secondary">
-                Cancel
-            </a>
+<script>
+    let current = 0;
+    const steps = document.querySelectorAll(".step");
+    const indicators = document.querySelectorAll(".indicator");
 
-            <button type="submit"
-                class="flex-1 rounded-button bg-primary px-6 py-3 font-bold text-white shadow-button hover:bg-beacon-700">
-                Save Changes
-            </button>
-        </div>
+    function showStep(){
+        steps.forEach((step,i)=>step.classList.toggle("active",i===current));
+        indicators.forEach((item,i)=>{
+            item.classList.toggle("text-gray-400",i!==current);
+            item.classList.toggle("font-bold",i===current);
+        });
+    }
 
-    </form:form>
-</div>
+    function nextStep(){
+        if(current < steps.length-1){
+            current++;
+            showStep();
+        }
+    }
+
+    function backStep(){
+        if(current > 0){
+            current--;
+            showStep();
+        }
+    }
+</script>
+
 </body>
 </html>
