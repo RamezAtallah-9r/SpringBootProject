@@ -132,9 +132,8 @@ public class HealthProfile {
 	public HealthProfile() {
 
 	}
-	
-	//Getters & Setters
-	
+
+	// Getters & Setters
 
 	@Transient
 	private MultipartFile inBodyFile;
@@ -151,13 +150,9 @@ public class HealthProfile {
 		return createdAt;
 	}
 
-
-
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
-
-
 
 	@PrePersist
 	protected void onCreate() {

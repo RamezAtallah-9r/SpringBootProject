@@ -11,34 +11,34 @@ import jakarta.validation.constraints.Size;
 // the LoginUser instance is discarded.
 public class LoginUser {
 
-    // Only email and password fields, which are all a user
-    // needs in order to log into our application
-    @NotEmpty(message = "Email is required!")
-    @Email(message = "Please enter a valid email!")
-    private String email;
+	// Only email and password fields, which are all a user
+	// needs in order to log into our application
+	@NotEmpty(message = "Email is required!")
+	@Email(message = "Please enter a valid email!")
+	private String email;
 
-    @NotEmpty(message = "Password is required!")
-    @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
-    private String password;
+	@NotEmpty(message = "Password is required!")
+	@Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
+	private String password;
 
-    // Empty constructor
-    public LoginUser() {
-    }
+	// Empty constructor
+	public LoginUser() {
+	}
 
-    // ----- getters and setters -----
-    public String getEmail() {
-        return email;
-    }
+	// ----- getters and setters -----
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

@@ -9,7 +9,7 @@ import com.axsos.Life.models.User;
 
 // Repository for saving user data to the database.
 @Repository
-public interface UserRepo extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
     // Finds a user by their email.
     // Returns an Optional: a container that may or may not hold a User,

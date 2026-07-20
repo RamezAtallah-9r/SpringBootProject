@@ -1,9 +1,18 @@
 package com.axsos.Life.models;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.*;
@@ -52,16 +61,35 @@ public class User {
     @NotEmpty(message = "Confirm Password is required!")
     @Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
     private String confirm;
+    
+    @Column(updatable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date createdAt;
 
-    // City - drop-down menu on the form (replaces "your goals")
-    @NotEmpty(message = "Please select your city!")
-    private String city;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date updatedAt;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private HealthProfile healthProfile;
+
+
 
     // Empty constructor required by JPA
     public User() {
     }
 
     // ----- getters and setters -----
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -110,11 +138,4 @@ public class User {
         this.confirm = confirm;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
 }

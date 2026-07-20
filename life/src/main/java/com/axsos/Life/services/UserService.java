@@ -1,7 +1,7 @@
 package com.axsos.Life.services;
 import java.util.Optional;
 
-import com.axsos.Life.repositories.UserRepo;
+import com.axsos.Life.repositories.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import com.axsos.Life.models.User;
         // @Autowired lets Spring inject the repository for us,
         // so we can omit writing the constructor.
         @Autowired
-        private UserRepo userRepo;
+        private UserRepository userRepo;
 
         // This method will be called from the controller
         // whenever a user submits a registration form.
@@ -92,6 +92,41 @@ import com.axsos.Life.models.User;
             } else {
                 return null;
             }
+        }
+        public User updateUser(
+                Long userId,
+                User updatedUser,
+                BindingResult result
+        ) {
+
+            User existingUser = findUserById(userId);
+
+            if (existingUser == null) {
+                return null;
+            }
+
+            Optional<User> emailUser =
+                    userRepo.findByEmail(updatedUser.getEmail());
+
+            if (emailUser.isPresent()
+                    && !emailUser.get().getId().equals(userId)) {
+
+                result.rejectValue(
+                        "email",
+                        "Unique",
+                        "Email is already used"
+                );
+            }
+
+            if (result.hasErrors()) {
+                return null;
+            }
+
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setPhone(updatedUser.getPhone());
+
+            return userRepo.save(existingUser);
         }
     }
 
