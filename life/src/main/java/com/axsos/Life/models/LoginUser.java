@@ -1,4 +1,4 @@
-package com.chaker.healthsync.models;
+package com.axsos.Life.models;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,13 +1,13 @@
 package com.axsos.Life.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.repository.CrudRepository;
 import com.axsos.Life.models.InBodyReport;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface InBodyReportRepository extends JpaRepository<InBodyReport, Long> {
+public interface InBodyReportRepository extends JpaRepository<InBodyReport, Long> , CrudRepository<InBodyReport, Long>{
 
     // Newest report first - used both for "does an InBody report
     // exist at all" and for the comparison-to-previous-report chart.
