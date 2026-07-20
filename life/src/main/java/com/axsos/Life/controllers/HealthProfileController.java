@@ -4,6 +4,8 @@ package com.axsos.Life.controllers;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.nio.file.*;
+
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import com.axsos.Life.models.HealthProfile;
 import com.axsos.Life.services.HealthProfileService;
 
+@Controller
+@RequestMapping("/onboarding")
 public class HealthProfileController {
 	 private final HealthProfileService healthProfileService;
 

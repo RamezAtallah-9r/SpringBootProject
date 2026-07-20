@@ -96,7 +96,8 @@ public class HealthProfileService {
                 updatedProfile.getTargetWeight()
         );
 
-        return healthProfileRepository.save(existingProfile);
+        return healthProfileRepo.save(existingProfile);
+        
     }
 
 }
