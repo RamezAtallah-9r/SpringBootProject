@@ -1,294 +1,582 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthSync — Login / Sign Up</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Tailwind via CDN (dev use). The config below adds our Clinical design tokens -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ink:   '#13221E',   // main text
-                        teal:  '#0E6B5C',   // brand
-                        tealdark: '#0A4A40',// hover
-                        mint:  '#E3F4EE',   // icon backgrounds
-                        mint2: '#F2FAF7',   // page tint
-                        paper: '#FCFDFC',   // page background
-                        line:  '#DCE8E3',   // borders
-                        danger:'#B4362F',   // errors
-                        dangerbg:'#FBEAE8',
-                    },
-                    fontFamily: {
-                        display: ['Manrope','sans-serif'],
-                        body:    ['Inter','sans-serif'],
-                    },
-                    boxShadow: {
-                        card: '0 20px 50px rgba(19,34,30,.08)',
-                        btn:  '0 6px 18px rgba(14,107,92,.25)',
-                    },
-                    borderRadius: { card: '24px' },
-                }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description"
+	content="LifeBeacon AI-powered nutrition and wellness platform">
+<title>Sign in or create account | LifeBeacon</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- LifeBeacon Tailwind configuration: kept inside this page intentionally -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            beacon: {
+              blue: "#279EFF",
+              navy: "#0C356A",
+              green: "#03C988",
+              sage: "#90C8AC",
+              mist: "#F4FAFF"
             }
+          },
+          boxShadow: {
+            soft: "0 18px 50px rgba(12, 53, 106, 0.10)"
+          },
+          borderRadius: {
+            "4xl": "2rem"
+          }
         }
-    </script>
-</head>
-<body class="font-body text-ink bg-paper min-h-screen flex flex-col">
+      }
+    };
+  </script>
 
-<!-- ============ NAV ============ -->
-<nav class="border-b border-line bg-paper/90 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" class="font-display font-extrabold text-teal text-xl flex items-center gap-2">
-      <span class="w-6 h-6 rounded-lg bg-teal relative
-                   after:content-[''] after:absolute after:inset-[6px] after:rounded-full
-                   after:border-2 after:border-white after:border-t-transparent after:rotate-45"></span>
-            HealthSync
-        </a>
-        <a href="#" class="text-sm font-semibold text-teal hover:underline">← Back to home</a>
-    </div>
-</nav>
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-<!-- ============ MAIN ============ -->
-<main class="flex-1 grid md:grid-cols-2 gap-14 max-w-6xl w-full mx-auto px-6 py-12 items-center">
+<!-- Page-specific reusable styles. These can be moved to a CSS file later. -->
+<style>
+html {
+	scroll-behavior: smooth;
+}
 
-    <!-- Supportive panel -->
-    <aside class="hidden md:block bg-gradient-to-br from-mint2 to-mint border border-line rounded-card p-10">
-    <span class="inline-flex items-center gap-2 bg-white border border-line rounded-full px-4 py-1.5 text-xs font-semibold text-teal mb-4">
-      <i class="w-2 h-2 rounded-full bg-green-500"></i> Coach online
-    </span>
-        <h2 class="font-display font-extrabold text-2xl mb-2">You're not alone in this — your coach is here.</h2>
-        <p class="text-sm text-ink/70 mb-7 max-w-xs">Real guidance from your own InBody numbers, right on WhatsApp.</p>
-        <div class="grid gap-3 max-w-xs">
-            <div class="justify-self-end bg-teal text-white text-sm px-4 py-2.5 rounded-2xl rounded-tr-sm shadow">Can I eat knafeh today? 🙈</div>
-            <div class="justify-self-start bg-white border border-line text-sm px-4 py-2.5 rounded-2xl rounded-tl-sm shadow">🟡 A small piece fits — you have 480 kcal left.</div>
-            <div class="justify-self-end bg-teal text-white text-sm px-4 py-2.5 rounded-2xl rounded-tr-sm shadow">Deal. Thanks coach! 💪</div>
-        </div>
-        <p class="mt-8 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2.5">🛡 A wellness coach, not a doctor — never a substitute for medical advice.</p>
-    </aside>
+body {
+	background: radial-gradient(circle at 10% 0%, rgba(39, 158, 255, .10),
+		transparent 30rem),
+		radial-gradient(circle at 95% 15%, rgba(3, 201, 136, .08), transparent
+		28rem), #f8fbff;
+	color: #0f172a;
+}
 
-    <!-- Auth card -->
-    <section class="bg-white border border-line rounded-card shadow-card p-8 md:p-9 max-w-md w-full justify-self-center">
+.glass {
+	background: rgba(255, 255, 255, .84);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
 
-        <!-- Tabs -->
-        <div class="grid grid-cols-2 bg-mint2 border border-line rounded-full p-1 mb-7" id="tabs">
-            <button id="tab-login"  onclick="show('login')"
-                    class="tab rounded-full py-2.5 font-display font-bold text-sm transition">Login</button>
-            <button id="tab-signup" onclick="show('signup')"
-                    class="tab rounded-full py-2.5 font-display font-bold text-sm transition">Sign Up</button>
-        </div>
+.card {
+	background: white;
+	border: 1px solid rgba(148, 163, 184, .20);
+	border-radius: 1.5rem;
+	box-shadow: 0 18px 50px rgba(12, 53, 106, .08);
+}
 
-        <!-- Banner for general messages (success / server errors) -->
-        <p id="banner" class="hidden text-sm rounded-xl px-4 py-2.5 mb-5"></p>
+.input {
+	width: 100%;
+	border: 1px solid #dbe4ee;
+	border-radius: .95rem;
+	padding: .85rem 1rem;
+	background: white;
+	outline: none;
+	transition: .2s ease;
+}
 
-        <!-- ============ LOGIN PANE ============ -->
-        <div id="pane-login">
-            <h1 class="font-display font-extrabold text-2xl mb-1">Welcome back</h1>
-            <p class="text-sm text-ink/60 mb-6">Log in to see today's plan.</p>
+.input:focus {
+	border-color: #279EFF;
+	box-shadow: 0 0 0 4px rgba(39, 158, 255, .12);
+}
 
-            <form novalidate onsubmit="return doLogin(event)" class="space-y-4">
-                <div>
-                    <label for="l-email" class="block text-sm font-semibold mb-1.5">Email</label>
-                    <input id="l-email" type="email" placeholder="lina@email.com" autocomplete="email"
-                           class="inp" data-err="email">
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="email"></p>
-                </div>
-                <div>
-                    <label for="l-pass" class="block text-sm font-semibold mb-1.5">Password</label>
-                    <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password"
-                           class="inp" data-err="password">
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="password"></p>
-                </div>
-                <button id="btn-login" class="btn-primary w-full">Continue</button>
-            </form>
-            <p class="text-center text-sm mt-5 text-ink/70">Don't have an account?
-                <a href="#" onclick="show('signup');return false" class="text-teal font-semibold hover:underline">Sign Up</a></p>
-        </div>
+.label {
+	display: block;
+	font-size: .875rem;
+	font-weight: 700;
+	color: #334155;
+	margin-bottom: .45rem;
+}
 
-        <!-- ============ SIGN UP PANE ============ -->
-        <div id="pane-signup" class="hidden">
-            <h1 class="font-display font-extrabold text-2xl mb-1">Create your account</h1>
-            <p class="text-sm text-ink/60 mb-6">Two minutes now, a personal plan right after.</p>
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: .5rem;
+	min-height: 2.85rem;
+	border-radius: .95rem;
+	padding: .75rem 1.1rem;
+	font-weight: 800;
+	transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
 
-            <form novalidate onsubmit="return doRegister(event)" class="space-y-4">
-                <div>
-                    <label for="s-name" class="block text-sm font-semibold mb-1.5">Name</label>
-                    <input id="s-name" type="text" placeholder="Lina Q." class="inp" data-err="name">
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="name"></p>
-                </div>
-                <div>
-                    <label for="s-email" class="block text-sm font-semibold mb-1.5">Email</label>
-                    <input id="s-email" type="email" placeholder="lina@email.com" class="inp" data-err="email">
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="email"></p>
-                </div>
-                <div>
-                    <label for="s-phone" class="block text-sm font-semibold mb-1.5">Phone</label>
-                    <input id="s-phone" type="tel" placeholder="+970 59 000 0000" class="inp" data-err="phone">
-                    <p class="text-xs text-ink/50 mt-1">🟢 Used for WhatsApp coaching & verification</p>
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="phone"></p>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label for="s-pass" class="block text-sm font-semibold mb-1.5">Password</label>
-                        <input id="s-pass" type="password" placeholder="••••••••" class="inp" data-err="password">
-                        <p class="err text-xs text-danger mt-1 hidden" data-err-for="password"></p>
-                    </div>
-                    <div>
-                        <label for="s-repass" class="block text-sm font-semibold mb-1.5">Re-type password</label>
-                        <input id="s-repass" type="password" placeholder="••••••••" class="inp" data-err="confirmPassword">
-                        <p class="err text-xs text-danger mt-1 hidden" data-err-for="confirmPassword"></p>
-                    </div>
-                </div>
+.btn:hover {
+	transform: translateY(-1px);
+}
 
-                <!-- MANY-TO-MANY: goals fetched from the backend -->
-                <div>
-                    <span class="block text-sm font-semibold mb-1.5">Your goals <span class="font-normal text-ink/50">(optional)</span></span>
-                    <div id="goals" class="flex flex-wrap gap-2">
-                        <!-- checkboxes injected by loadGoals() -->
-                    </div>
-                </div>
+.btn-primary {
+	color: white;
+	background: linear-gradient(135deg, #279EFF, #167fd5);
+	box-shadow: 0 12px 28px rgba(39, 158, 255, .25);
+}
 
-                <div>
-                    <label class="flex items-start gap-2.5 text-sm text-ink/80">
-                        <input id="s-terms" type="checkbox" class="mt-0.5 w-4 h-4 accent-teal" data-err="agreeTerms">
-                        <span>I agree to the <a href="#" class="text-teal font-semibold hover:underline">Terms of Use</a>
-              and <a href="#" class="text-teal font-semibold hover:underline">Privacy Policy</a></span>
-                    </label>
-                    <p class="err text-xs text-danger mt-1 hidden" data-err-for="agreeTerms"></p>
-                </div>
+.btn-secondary {
+	color: #0C356A;
+	background: white;
+	border: 1px solid #dbe4ee;
+}
 
-                <button id="btn-register" class="btn-primary w-full">Create Account</button>
-            </form>
-            <p class="text-center text-sm mt-5 text-ink/70">Already have an account?
-                <a href="#" onclick="show('login');return false" class="text-teal font-semibold hover:underline">Login</a></p>
-        </div>
-    </section>
-</main>
+.btn-success {
+	color: white;
+	background: linear-gradient(135deg, #03C988, #02aa73);
+	box-shadow: 0 12px 28px rgba(3, 201, 136, .20);
+}
 
-<footer class="border-t border-line bg-mint2 py-5 text-center text-xs text-ink/60">
-    © 2026 HealthSync · Terms · Privacy · Contact
-</footer>
+.nav-link {
+	color: #475569;
+	font-weight: 700;
+	transition: color .2s ease, background .2s ease;
+}
 
-<!-- Reusable Tailwind "component" classes -->
-<style type="text/tailwindcss">
-    .inp{ @apply w-full border-[1.5px] border-line rounded-xl px-3.5 py-3 text-sm bg-paper
-    focus:outline-none focus:border-teal focus:bg-white focus:ring-[3px] focus:ring-teal/10 transition; }
-    .inp.bad{ @apply border-danger bg-dangerbg; }
-    .btn-primary{ @apply bg-teal text-white font-display font-bold rounded-full py-3.5 shadow-btn
-    hover:bg-tealdark hover:-translate-y-px transition disabled:opacity-60 disabled:cursor-wait; }
-    .tab-on{ @apply bg-teal text-white shadow-btn; }
-    .tab-off{ @apply text-ink/60; }
-    .goal-chip{ @apply cursor-pointer select-none border border-line rounded-full px-3.5 py-1.5 text-sm
-    peer-checked:bg-teal peer-checked:text-white peer-checked:border-teal transition; }
+.nav-link:hover, .nav-link.active {
+	color: #0C356A;
+	background: rgba(39, 158, 255, .10);
+}
+
+.fade-up {
+	animation: fadeUp .55s ease both;
+}
+
+@
+keyframes fadeUp {from { opacity:0;
+	transform: translateY(12px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+}
 </style>
 
-<script>
-    const API = "http://localhost:8080";   // Spring Boot backend
 
-    /* ---------- tab switching ---------- */
-    function show(name){
-        document.getElementById('pane-login').classList.toggle('hidden', name!=='login');
-        document.getElementById('pane-signup').classList.toggle('hidden', name!=='signup');
-        document.getElementById('tab-login').className  = 'tab rounded-full py-2.5 font-display font-bold text-sm transition ' + (name==='login' ?'tab-on':'tab-off');
-        document.getElementById('tab-signup').className = 'tab rounded-full py-2.5 font-display font-bold text-sm transition ' + (name==='signup'?'tab-on':'tab-off');
-        hideBanner(); clearErrors();
-    }
-    show('login');
+<!-- Strategic LifeBeacon color system: 60% neutrals, 30% brand structure, 10% action accent -->
+<style>
+:root {
+	/* 60% — dominant neutral foundation */
+	--color-canvas: #F7F9F7;
+	--color-surface: #FFFFFF;
+	--color-surface-soft: #F1F6F4;
+	--color-border: #D8E3DF;
+	--color-text: #24313D;
+	--color-text-muted: #52606D;
+	--color-text-subtle: #667784;
+	/* 30% — brand structure: AI trust + wellness vitality */
+	--color-primary: #16324F;
+	--color-primary-hover: #0F2740;
+	--color-primary-soft: #EAF1F7;
+	--color-secondary: #237662;
+	--color-secondary-hover: #195A4B;
+	--color-secondary-soft: #E8F5F1;
+	--color-secondary-border: #A9D6C8;
+	/* 10% — warm action accent */
+	--color-accent: #C94335;
+	--color-accent-hover: #A93429;
+	--color-accent-active: #8E2B23;
+	--color-accent-soft: #FCEDEA;
+	--color-accent-border: #F0B8B1;
+	/* Semantic UI colors */
+	--color-success: #237662;
+	--color-success-soft: #E8F5F1;
+	--color-warning: #8B5E00;
+	--color-warning-soft: #FFF4D6;
+	--color-danger: #B42318;
+	--color-danger-soft: #FDECEA;
+	--color-info: #245E91;
+	--color-info-soft: #EAF3FB;
+	/* Focus and depth */
+	--focus-ring: rgba(201, 67, 53, .28);
+	--shadow-card: 0 18px 48px rgba(22, 50, 79, .09);
+	--shadow-hover: 0 22px 55px rgba(22, 50, 79, .14);
+}
 
-    /* ---------- banner (general messages) ---------- */
-    function banner(text, kind){ // kind: 'ok' | 'bad'
-        const b=document.getElementById('banner');
-        b.textContent=text;
-        b.className='text-sm rounded-xl px-4 py-2.5 mb-5 ' +
-            (kind==='ok' ? 'bg-mint text-teal border border-line'
-                : 'bg-dangerbg text-danger border border-danger/30');
-    }
-    function hideBanner(){ document.getElementById('banner').className='hidden'; }
+body {
+	color: var(--color-text);
+	background: radial-gradient(circle at 8% 0%, rgba(35, 118, 98, .10),
+		transparent 28rem),
+		radial-gradient(circle at 96% 10%, rgba(22, 50, 79, .09), transparent
+		30rem), var(--color-canvas);
+}
 
-    /* ---------- field errors (from Spring validation) ---------- */
-    function clearErrors(){
-        document.querySelectorAll('.err').forEach(p=>{p.classList.add('hidden');p.textContent='';});
-        document.querySelectorAll('.inp').forEach(i=>i.classList.remove('bad'));
-    }
-    function showErrors(errors, prefix){
-        // errors = { fieldName: "message", ... } straight from GlobalExceptionHandler
-        for(const [field,message] of Object.entries(errors)){
-            const pane = document.getElementById('pane-'+prefix);
-            const msgEl = pane.querySelector(`[data-err-for="${field}"]`);
-            const inpEl = pane.querySelector(`[data-err="${field}"]`);
-            if(msgEl){ msgEl.textContent=message; msgEl.classList.remove('hidden'); }
-            if(inpEl) inpEl.classList.add('bad');
+h1, h2, h3, h4, h5, h6 {
+	color: var(--color-primary);
+}
+
+p, li {
+	color: var(--color-text-muted);
+}
+
+small, .text-slate-400, .text-slate-500 {
+	color: var(--color-text-muted) !important;
+}
+
+a {
+	text-underline-offset: .2em;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+	textarea:focus-visible {
+	outline: 3px solid var(--focus-ring);
+	outline-offset: 3px;
+}
+
+.glass {
+	background: rgba(247, 249, 247, .90);
+	border-color: var(--color-border) !important;
+}
+
+.card {
+	background: var(--color-surface);
+	border-color: var(--color-border);
+	box-shadow: var(--shadow-card);
+	transition: transform .2s ease, box-shadow .2s ease, border-color .2s
+		ease;
+}
+
+.card:hover {
+	box-shadow: var(--shadow-hover);
+}
+
+.input {
+	color: var(--color-text);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.input::placeholder {
+	color: #71808C;
+}
+
+.input:hover {
+	border-color: var(--color-secondary-border);
+}
+
+.input:focus {
+	border-color: var(--color-accent);
+	box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.btn-primary {
+	color: #FFFFFF;
+	background: var(--color-accent);
+	box-shadow: 0 12px 26px rgba(201, 67, 53, .22);
+}
+
+.btn-primary:hover {
+	background: var(--color-accent-hover);
+}
+
+.btn-primary:active {
+	background: var(--color-accent-active);
+	transform: translateY(1px);
+}
+
+.btn-success {
+	color: #FFFFFF;
+	background: var(--color-secondary);
+	box-shadow: 0 12px 26px rgba(35, 118, 98, .20);
+}
+
+.btn-success:hover {
+	background: var(--color-secondary-hover);
+}
+
+.btn-secondary {
+	color: var(--color-primary);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+	background: var(--color-primary-soft);
+	border-color: #AFC4D5;
+}
+
+.nav-link {
+	color: var(--color-text-muted);
+}
+
+.nav-link:hover, .nav-link.active {
+	color: var(--color-primary);
+	background: var(--color-accent-soft);
+}
+
+.bg-beacon-navy {
+	background-color: var(--color-primary) !important;
+}
+
+.text-beacon-navy {
+	color: var(--color-primary) !important;
+}
+
+.text-beacon-blue {
+	color: var(--color-info) !important;
+}
+
+.text-beacon-green {
+	color: var(--color-secondary) !important;
+}
+
+.bg-beacon-blue {
+	background-color: var(--color-info) !important;
+}
+
+.bg-beacon-green {
+	background-color: var(--color-secondary) !important;
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: .4rem;
+	min-height: 1.75rem;
+	border-radius: 999px;
+	padding: .3rem .7rem;
+	font-size: .75rem;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.badge-brand {
+	color: var(--color-secondary-hover);
+	background: var(--color-secondary-soft);
+}
+
+.badge-accent {
+	color: var(--color-accent-hover);
+	background: var(--color-accent-soft);
+}
+
+.badge-neutral {
+	color: var(--color-text-muted);
+	background: var(--color-surface-soft);
+}
+
+.section-kicker {
+	color: var(--color-secondary);
+	font-size: .875rem;
+	font-weight: 900;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.section-title {
+	color: var(--color-primary);
+	font-weight: 900;
+	letter-spacing: -.035em;
+}
+
+.section-copy {
+	color: var(--color-text-muted);
+	line-height: 1.8;
+}
+</style>
+
+</head>
+<body class="min-h-screen antialiased">
+
+	<%--
+  LifeBeacon Authentication Page
+  Spring MVC View: auth.jsp
+--%>
+
+
+	<main class="grid min-h-screen place-items-center px-5 py-10">
+		<section
+			class="card grid w-full max-w-6xl overflow-hidden lg:grid-cols-[.9fr_1.1fr]">
+			<!-- Emotional welcome panel -->
+			<div
+				class="relative flex min-h-[420px] flex-col justify-between overflow-hidden bg-beacon-navy p-8 text-white sm:p-12">
+				<div
+					class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-beacon-blue/30 blur-3xl"></div>
+				<a href="<c:url value='/' />"
+					class="relative flex items-center gap-3 font-black"> <span
+					class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10"><i
+						data-lucide="heart-pulse"></i></span> <span class="text-xl"><span
+						class="text-beacon-blue">Life</span>Beacon</span>
+				</a>
+
+				<div class="relative">
+					<p class="font-bold text-blue-200">Welcome back</p>
+					<h1 class="mt-3 text-4xl font-black leading-tight sm:text-5xl">A
+						healthier rhythm starts with one clear step.</h1>
+					<p class="mt-5 max-w-lg leading-7 text-blue-100">Sign in to
+						continue your daily plan, or create an account in a few simple
+						steps.</p>
+				</div>
+
+				<p class="relative text-sm text-blue-200">LifeBeacon supports
+					wellness decisions and does not replace professional medical care.</p>
+			</div>
+
+			<!-- Authentication forms -->
+			<div class="bg-white p-6 sm:p-10">
+				<div class="mb-7 flex rounded-2xl bg-slate-100 p-1" role="tablist">
+					<button id="signInTab"
+						class="auth-tab flex-1 rounded-xl bg-white px-4 py-3 font-extrabold text-beacon-navy shadow-sm"
+						type="button">Sign in</button>
+					<button id="registerTab"
+						class="auth-tab flex-1 rounded-xl px-4 py-3 font-extrabold text-slate-500"
+						type="button">Create account</button>
+				</div>
+
+				<!-- Sign-in form -->
+				<form id="signInPanel" action="<c:url value='/login' />"
+					method="post" class="space-y-5" novalidate>
+					<div>
+						<p class="text-sm font-extrabold text-beacon-blue">Good to see
+							you</p>
+						<h2 class="mt-1 text-3xl font-black text-beacon-navy">Sign in</h2>
+					</div>
+					<div>
+						<label class="label" for="loginEmail">Email address</label> <input
+							class="input" id="loginEmail" name="email" type="email"
+							placeholder="name@example.com" autocomplete="email" required>
+					</div>
+					<div>
+						<div class="flex items-center justify-between">
+							<label class="label" for="loginPassword">Password</label> <a
+								href="<c:url value='/forgot-password' />"
+								class="mb-2 text-sm font-bold text-beacon-blue">Forgot
+								password?</a>
+						</div>
+						<input class="input" id="loginPassword" name="password"
+							type="password" placeholder="Enter your password"
+							autocomplete="current-password" required>
+					</div>
+					<label
+						class="flex items-center gap-3 text-sm font-semibold text-slate-600">
+						<input type="checkbox"
+						class="h-4 w-4 rounded border-slate-300 text-beacon-blue">
+						Keep me signed in
+					</label>
+					<button class="btn btn-primary w-full" type="submit">
+						Sign in <i data-lucide="arrow-right" class="h-5 w-5"></i>
+					</button>
+				</form>
+
+				<!-- Registration form -->
+				<form id="registerPanel" action="<c:url value='/register' />"
+					method="post" class="hidden grid-cols-2 gap-4" novalidate>
+					<div class="col-span-2">
+						<p class="text-sm font-extrabold text-beacon-green">Start your
+							journey</p>
+						<h2 class="mt-1 text-3xl font-black text-beacon-navy">Create
+							account</h2>
+					</div>
+					<div class="col-span-2">
+						<label class="label" for="fullName">Full name</label> <input
+							class="input" id="fullName" name="name" type="text"
+							placeholder="Your full name" autocomplete="name" required>
+					</div>
+					<div class="col-span-2">
+						<label class="label" for="registerEmail">Email address</label> <input
+							class="input" id="registerEmail" name="email" type="email"
+							placeholder="name@example.com" autocomplete="email" required>
+					</div>
+					<div>
+						<label class="label" for="registerPassword">Password</label> <input
+							class="input" id="registerPassword" name="password"
+							type="password" placeholder="8+ characters" required>
+					</div>
+					<div>
+						<label class="label" for="confirmPassword">Confirm
+							password</label> <input class="input" id="confirmPassword"
+							name="confirmPassword" type="password"
+							placeholder="Repeat password" required>
+					</div>
+					<div class="col-span-2">
+						<label class="label" for="city">City</label> <input class="input"
+							id="city" name="city" type="text" placeholder="Ramallah" required>
+					</div>
+					<label
+						class="col-span-2 flex items-start gap-3 text-sm text-slate-600">
+						<input type="checkbox"
+						class="mt-1 h-4 w-4 rounded border-slate-300 text-beacon-blue"
+						required> <span>I agree to the Terms and Privacy
+							Policy.</span>
+					</label>
+					<button class="btn btn-success col-span-2 w-full" type="submit">
+						Create account <i data-lucide="user-plus" class="h-5 w-5"></i>
+					</button>
+				</form>
+			</div>
+		</section>
+	</main>
+
+
+
+	<!-- Page JavaScript. It is intentionally kept in this HTML file. -->
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Render Lucide icons after the page is loaded.
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Responsive mobile navigation.
+      const menuButton = document.getElementById("mobileMenuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", () => {
+          const isHidden = mobileMenu.classList.toggle("hidden");
+          menuButton.setAttribute("aria-expanded", String(!isHidden));
+        });
+      }
+
+      // Highlight the current navigation link using the current file name.
+      const currentPage = window.location.pathname.split("/").pop() || "index.html";
+      document.querySelectorAll("a.nav-link").forEach((link) => {
+        const linkPage = link.getAttribute("href");
+        if (linkPage === currentPage) {
+          link.classList.add("active");
+          link.setAttribute("aria-current", "page");
         }
-    }
+      });
 
-    /* ---------- load goals (many-to-many) ---------- */
-    async function loadGoals(){
-        const box=document.getElementById('goals');
-        let names=["Fat loss","Muscle gain","Maintain","General health"]; // fallback
-        try{
-            const r=await fetch(API+'/api/goals');
-            if(r.ok) names=await r.json();
-        }catch(e){ /* backend not running yet - keep fallback */ }
-        box.innerHTML = names.map(n=>`
-    <label>
-      <input type="checkbox" value="${n}" class="peer hidden goal-box">
-      <span class="goal-chip inline-block">${n}</span>
-    </label>`).join('');
-    }
-    loadGoals();
+      // Close dismissible messages.
+      document.querySelectorAll("[data-dismiss]").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest("[data-alert]")?.remove();
+        });
+      });
+    });
+  </script>
 
-    /* ---------- register ---------- */
-    async function doRegister(e){
-        e.preventDefault(); hideBanner(); clearErrors();
-        const body={
-            name:            document.getElementById('s-name').value,
-            email:           document.getElementById('s-email').value,
-            phone:           document.getElementById('s-phone').value,
-            password:        document.getElementById('s-pass').value,
-            confirmPassword: document.getElementById('s-repass').value,
-            agreeTerms:      document.getElementById('s-terms').checked,
-            goals: [...document.querySelectorAll('.goal-box:checked')].map(c=>c.value)
-        };
-        const btn=document.getElementById('btn-register'); btn.disabled=true;
-        try{
-            const r=await fetch(API+'/api/register',{method:'POST',
-                headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-            const data=await r.json();
-            if(data.ok){
-                show('login');
-                banner('Account created! Log in to continue.','ok');
-                document.getElementById('l-email').value=body.email;
-            }else if(data.errors){ showErrors(data.errors,'signup'); }
-            else{ banner(data.error||'Something went wrong','bad'); }
-        }catch(err){ banner('Cannot reach the server — is Spring Boot running on 8080?','bad'); }
-        btn.disabled=false;
-        return false;
-    }
 
-    /* ---------- login ---------- */
-    async function doLogin(e){
-        e.preventDefault(); hideBanner(); clearErrors();
-        const body={
-            email:   document.getElementById('l-email').value,
-            password:document.getElementById('l-pass').value
-        };
-        const btn=document.getElementById('btn-login'); btn.disabled=true;
-        try{
-            const r=await fetch(API+'/api/login',{method:'POST',
-                headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-            const data=await r.json();
-            if(data.ok){
-                // backend already emailed the code -> go type it
-                window.location.href='verify-email.html?email='+encodeURIComponent(body.email);
-            }else if(data.errors){ showErrors(data.errors,'login'); }
-            else{ banner(data.error||'Login failed','bad'); }
-        }catch(err){ banner('Cannot reach the server — is Spring Boot running on 8080?','bad'); }
-        btn.disabled=false;
-        return false;
-    }
-</script>
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const signInTab = document.getElementById("signInTab");
+      const registerTab = document.getElementById("registerTab");
+      const signInPanel = document.getElementById("signInPanel");
+      const registerPanel = document.getElementById("registerPanel");
+
+      function showPanel(panel) {
+        const showSignIn = panel === "signin";
+        signInPanel.classList.toggle("hidden", !showSignIn);
+        registerPanel.classList.toggle("hidden", showSignIn);
+        registerPanel.classList.toggle("grid", !showSignIn);
+
+        signInTab.classList.toggle("bg-white", showSignIn);
+        signInTab.classList.toggle("shadow-sm", showSignIn);
+        signInTab.classList.toggle("text-beacon-navy", showSignIn);
+        signInTab.classList.toggle("text-slate-500", !showSignIn);
+
+        registerTab.classList.toggle("bg-white", !showSignIn);
+        registerTab.classList.toggle("shadow-sm", !showSignIn);
+        registerTab.classList.toggle("text-beacon-navy", !showSignIn);
+        registerTab.classList.toggle("text-slate-500", showSignIn);
+      }
+
+      signInTab.addEventListener("click", () => showPanel("signin"));
+      registerTab.addEventListener("click", () => showPanel("register"));
+    });
+  </script>
+
 </body>
 </html>

@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description"
 	content="LifeBeacon AI-powered nutrition and wellness platform">
-<title>Profile | LifeBeacon</title>
+<title>InBody reports | LifeBeacon</title>
 
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -380,9 +380,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 <body class="min-h-screen antialiased">
 
 	<%--
- LifeBeacon Profile
- Spring MVC View: profile.jsp
- Controller: GET /profile
+ LifeBeacon InBody Page
+ Spring MVC View: inbody.jsp
+ Controller: GET /inbody
 --%>
 
 	<!-- Unified application navigation. This block is intentionally duplicated in every page. -->
@@ -446,114 +446,140 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 	</header>
 
 
-	<main class="mx-auto max-w-6xl px-5 py-10">
-		<section
-			class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-			<div>
-				<p class="font-extrabold text-beacon-blue">Your account</p>
-				<h1 class="mt-2 text-4xl font-black text-beacon-navy">Profile &
-					health context</h1>
-				<p class="mt-3 text-slate-500">Review the information used to
-					personalize your daily roadmap.</p>
-			</div>
-			<a href="<c:url value='/profile/edit' />" class="btn btn-primary"><i
-				data-lucide="pencil" class="h-5 w-5"></i> Edit profile</a>
-		</section>
+	<main class="mx-auto max-w-7xl px-5 py-10">
+		<div>
+			<p class="font-extrabold text-beacon-blue">Optional
+				body-composition data</p>
+			<h1 class="mt-2 text-4xl font-black text-beacon-navy">InBody
+				reports</h1>
+			<p class="mt-3 max-w-2xl leading-7 text-slate-500">Upload
+				measured values to improve future plans. You can still use
+				LifeBeacon without a report.</p>
+		</div>
 
-		<section class="mt-8 grid gap-6 lg:grid-cols-[.7fr_1.3fr]">
-			<!-- Identity card -->
-			<article class="card p-6">
-				<div
-					class="grid h-24 w-24 place-items-center rounded-3xl bg-gradient-to-br from-blue-100 to-emerald-100 text-3xl font-black text-beacon-navy">MS</div>
-				<h2 class="mt-5 text-2xl font-black text-beacon-navy">Murad
-					Shaheen</h2>
-				<p class="mt-1 text-slate-500">murad@example.com</p>
-				<div class="mt-5 space-y-3 text-sm">
-					<p class="flex items-center gap-3">
-						<i data-lucide="map-pin" class="h-4 w-4 text-beacon-blue"></i>
-						Ramallah, Palestine
-					</p>
-					<p class="flex items-center gap-3">
-						<i data-lucide="languages" class="h-4 w-4 text-beacon-blue"></i>
-						English
-					</p>
-					<p class="flex items-center gap-3">
-						<i data-lucide="badge-check" class="h-4 w-4 text-beacon-green"></i>
-						Email verified
-					</p>
-				</div>
-				<div
-					class="mt-6 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-800">
-					<b>Onboarding complete</b>
-					<p class="mt-1">Your profile is ready for roadmap generation.</p>
-				</div>
-			</article>
-
-			<!-- Health overview -->
-			<article class="card p-6 sm:p-7">
-				<div class="flex items-center justify-between">
+		<section class="mt-8 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
+			<!-- Upload card -->
+			<form id="inbodyForm" class="card p-6 sm:p-7">
+				<div class="flex items-start gap-4">
+					<span
+						class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-beacon-blue"><i
+						data-lucide="file-up"></i></span>
 					<div>
-						<p class="text-sm font-extrabold text-beacon-green">Personalization
-							data</p>
-						<h2 class="mt-1 text-2xl font-black text-beacon-navy">Health
-							overview</h2>
-					</div>
-					<i data-lucide="shield-check" class="h-7 w-7 text-beacon-green"></i>
-				</div>
-				<div class="mt-6 grid gap-4 sm:grid-cols-2">
-					<div class="rounded-2xl bg-slate-50 p-4">
-						<small class="font-bold text-slate-500">Primary goal</small><b
-							class="mt-2 block text-beacon-navy">Lose fat safely</b>
-					</div>
-					<div class="rounded-2xl bg-slate-50 p-4">
-						<small class="font-bold text-slate-500">Activity level</small><b
-							class="mt-2 block text-beacon-navy">Lightly active</b>
-					</div>
-					<div class="rounded-2xl bg-slate-50 p-4">
-						<small class="font-bold text-slate-500">Current weight</small><b
-							class="mt-2 block text-beacon-navy">82.0 kg</b>
-					</div>
-					<div class="rounded-2xl bg-slate-50 p-4">
-						<small class="font-bold text-slate-500">Target weight</small><b
-							class="mt-2 block text-beacon-navy">76.0 kg</b>
-					</div>
-					<div class="rounded-2xl bg-rose-50 p-4">
-						<small class="font-bold text-rose-500">Allergies · hard
-							restriction</small><b class="mt-2 block text-beacon-navy">Peanuts</b>
-					</div>
-					<div class="rounded-2xl bg-blue-50 p-4">
-						<small class="font-bold text-beacon-blue">Health
-							conditions</small><b class="mt-2 block text-beacon-navy">None
-							declared</b>
+						<h2 class="text-2xl font-black text-beacon-navy">Add a report</h2>
+						<p class="mt-1 text-sm text-slate-500">PDF or image with
+							optional manual values.</p>
 					</div>
 				</div>
-			</article>
-		</section>
 
-		<section class="mt-6 grid gap-6 md:grid-cols-3">
-			<article class="card p-5">
-				<span
-					class="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-beacon-blue"><i
-					data-lucide="clock-3"></i></span>
-				<h3 class="mt-4 font-black text-beacon-navy">Daily schedule</h3>
-				<p class="mt-2 text-sm leading-6 text-slate-500">Wake 07:00 ·
-					Work 09:00–17:00 · Sleep 23:00</p>
-			</article>
-			<article class="card p-5">
-				<span
-					class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-beacon-green"><i
-					data-lucide="message-circle-heart"></i></span>
-				<h3 class="mt-4 font-black text-beacon-navy">WhatsApp reminders</h3>
-				<p class="mt-2 text-sm leading-6 text-slate-500">Enabled for
-					meals, water, movement, and sleep.</p>
-			</article>
-			<article class="card p-5">
-				<span
-					class="grid h-11 w-11 place-items-center rounded-xl bg-violet-50 text-violet-500"><i
-					data-lucide="file-heart"></i></span>
-				<h3 class="mt-4 font-black text-beacon-navy">Latest InBody</h3>
-				<p class="mt-2 text-sm leading-6 text-slate-500">July 12, 2026 ·
-					BMR 1,740 kcal</p>
+				<label id="dropZone"
+					class="mt-6 grid cursor-pointer place-items-center rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center transition hover:border-beacon-blue hover:bg-blue-50/40">
+					<i data-lucide="upload-cloud" class="h-9 w-9 text-beacon-blue"></i>
+					<b class="mt-3 text-beacon-navy">Choose a report file</b> <span
+					id="fileName" class="mt-1 text-sm text-slate-500">PDF, PNG,
+						or JPG</span> <input id="reportFile" class="hidden" type="file"
+					accept=".pdf,image/*" required>
+				</label>
+
+				<div class="mt-5 grid grid-cols-2 gap-4">
+					<div>
+						<label class="label" for="reportWeight">Weight (kg)</label><input
+							class="input" id="reportWeight" type="number" step="0.1"
+							placeholder="82.0">
+					</div>
+					<div>
+						<label class="label" for="muscleMass">Muscle mass (kg)</label><input
+							class="input" id="muscleMass" type="number" step="0.1"
+							placeholder="35.4">
+					</div>
+					<div>
+						<label class="label" for="fatPercentage">Body fat (%)</label><input
+							class="input" id="fatPercentage" type="number" step="0.1"
+							placeholder="21.5">
+					</div>
+					<div>
+						<label class="label" for="bmr">BMR (kcal)</label><input
+							class="input" id="bmr" type="number" placeholder="1740">
+					</div>
+				</div>
+
+				<button class="btn btn-primary mt-6 w-full" type="submit">
+					<i data-lucide="save" class="h-5 w-5"></i> Save report
+				</button>
+			</form>
+
+			<!-- History card -->
+			<article class="card p-6 sm:p-7">
+				<div class="flex items-center justify-between gap-4">
+					<div>
+						<p class="text-sm font-extrabold text-beacon-green">Your
+							measurements</p>
+						<h2 class="mt-1 text-2xl font-black text-beacon-navy">Report
+							history</h2>
+					</div>
+					<button class="btn btn-secondary py-2 text-sm">
+						<i data-lucide="arrow-down-to-line" class="h-4 w-4"></i> Export
+					</button>
+				</div>
+
+				<div class="mt-6 space-y-4">
+					<div class="rounded-2xl border border-slate-200 p-5">
+						<div class="flex items-center justify-between">
+							<div>
+								<b class="text-beacon-navy">July 12, 2026</b>
+								<p class="mt-1 text-sm text-slate-500">Confirmed report</p>
+							</div>
+							<span
+								class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">Current</span>
+						</div>
+						<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+							<div>
+								<small class="text-slate-500">Weight</small><b
+									class="mt-1 block text-beacon-navy">82.0 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Muscle</small><b
+									class="mt-1 block text-beacon-navy">35.4 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Body fat</small><b
+									class="mt-1 block text-beacon-navy">21.5%</b>
+							</div>
+							<div>
+								<small class="text-slate-500">BMR</small><b
+									class="mt-1 block text-beacon-navy">1,740</b>
+							</div>
+						</div>
+					</div>
+
+					<div class="rounded-2xl border border-slate-200 p-5">
+						<div class="flex items-center justify-between">
+							<div>
+								<b class="text-beacon-navy">June 02, 2026</b>
+								<p class="mt-1 text-sm text-slate-500">Previous report</p>
+							</div>
+							<span
+								class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">Archived</span>
+						</div>
+						<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+							<div>
+								<small class="text-slate-500">Weight</small><b
+									class="mt-1 block text-beacon-navy">84.1 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Muscle</small><b
+									class="mt-1 block text-beacon-navy">34.8 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Body fat</small><b
+									class="mt-1 block text-beacon-navy">23.2%</b>
+							</div>
+							<div>
+								<small class="text-slate-500">BMR</small><b
+									class="mt-1 block text-beacon-navy">1,712</b>
+							</div>
+						</div>
+					</div>
+				</div>
 			</article>
 		</section>
 	</main>
@@ -611,6 +637,27 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     });
   </script>
 
+
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fileInput = document.getElementById("reportFile");
+      const fileName = document.getElementById("fileName");
+      const form = document.getElementById("inbodyForm");
+
+      fileInput.addEventListener("change", () => {
+        fileName.textContent = fileInput.files[0]?.name || "PDF, PNG, or JPG";
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const button = form.querySelector('button[type="submit"]');
+        button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i> Report saved';
+        button.classList.remove("btn-primary");
+        button.classList.add("btn-success");
+        lucide.createIcons();
+      });
+    });
+  </script>
 
 </body>
 </html>

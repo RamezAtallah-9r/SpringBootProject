@@ -1,9 +1,9 @@
 package com.axsos.Life.controllers;
 
-import com.chaker.healthsync.models.LoginUser;
-import com.chaker.healthsync.models.User;
-import com.chaker.healthsync.services.EmailService;
-import com.chaker.healthsync.services.UserService;
+import com.axsos.Life.models.LoginUser;
+import com.axsos.Life.models.User;
+import com.axsos.Life.services.EmailService;
+import com.axsos.Life.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
