@@ -2,9 +2,11 @@ package com.axsos.Life.services;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.axsos.Life.models.HealthProfile;
 import com.axsos.Life.repositories.HealthProfileRepository;
-
+@Service
 public class HealthProfileService {
 	// Repository used to communicate with the health_profiles table
 	private final HealthProfileRepository healthProfileRepo;
