@@ -153,237 +153,17 @@ to {
 }
 </style>
 
-
-<!-- Strategic LifeBeacon color system: 60% neutrals, 30% brand structure, 10% action accent -->
-<style>
-:root {
-	/* 60% — dominant neutral foundation */
-	--color-canvas: #F7F9F7;
-	--color-surface: #FFFFFF;
-	--color-surface-soft: #F1F6F4;
-	--color-border: #D8E3DF;
-	--color-text: #24313D;
-	--color-text-muted: #52606D;
-	--color-text-subtle: #667784;
-	/* 30% — brand structure: AI trust + wellness vitality */
-	--color-primary: #16324F;
-	--color-primary-hover: #0F2740;
-	--color-primary-soft: #EAF1F7;
-	--color-secondary: #237662;
-	--color-secondary-hover: #195A4B;
-	--color-secondary-soft: #E8F5F1;
-	--color-secondary-border: #A9D6C8;
-	/* 10% — warm action accent */
-	--color-accent: #C94335;
-	--color-accent-hover: #A93429;
-	--color-accent-active: #8E2B23;
-	--color-accent-soft: #FCEDEA;
-	--color-accent-border: #F0B8B1;
-	/* Semantic UI colors */
-	--color-success: #237662;
-	--color-success-soft: #E8F5F1;
-	--color-warning: #8B5E00;
-	--color-warning-soft: #FFF4D6;
-	--color-danger: #B42318;
-	--color-danger-soft: #FDECEA;
-	--color-info: #245E91;
-	--color-info-soft: #EAF3FB;
-	/* Focus and depth */
-	--focus-ring: rgba(201, 67, 53, .28);
-	--shadow-card: 0 18px 48px rgba(22, 50, 79, .09);
-	--shadow-hover: 0 22px 55px rgba(22, 50, 79, .14);
-}
-
-body {
-	color: var(--color-text);
-	background: radial-gradient(circle at 8% 0%, rgba(35, 118, 98, .10),
-		transparent 28rem),
-		radial-gradient(circle at 96% 10%, rgba(22, 50, 79, .09), transparent
-		30rem), var(--color-canvas);
-}
-
-h1, h2, h3, h4, h5, h6 {
-	color: var(--color-primary);
-}
-
-p, li {
-	color: var(--color-text-muted);
-}
-
-small, .text-slate-400, .text-slate-500 {
-	color: var(--color-text-muted) !important;
-}
-
-a {
-	text-underline-offset: .2em;
-}
-
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
-	textarea:focus-visible {
-	outline: 3px solid var(--focus-ring);
-	outline-offset: 3px;
-}
-
-.glass {
-	background: rgba(247, 249, 247, .90);
-	border-color: var(--color-border) !important;
-}
-
-.card {
-	background: var(--color-surface);
-	border-color: var(--color-border);
-	box-shadow: var(--shadow-card);
-	transition: transform .2s ease, box-shadow .2s ease, border-color .2s
-		ease;
-}
-
-.card:hover {
-	box-shadow: var(--shadow-hover);
-}
-
-.input {
-	color: var(--color-text);
-	background: var(--color-surface);
-	border-color: var(--color-border);
-}
-
-.input::placeholder {
-	color: #71808C;
-}
-
-.input:hover {
-	border-color: var(--color-secondary-border);
-}
-
-.input:focus {
-	border-color: var(--color-accent);
-	box-shadow: 0 0 0 4px var(--focus-ring);
-}
-
-.btn-primary {
-	color: #FFFFFF;
-	background: var(--color-accent);
-	box-shadow: 0 12px 26px rgba(201, 67, 53, .22);
-}
-
-.btn-primary:hover {
-	background: var(--color-accent-hover);
-}
-
-.btn-primary:active {
-	background: var(--color-accent-active);
-	transform: translateY(1px);
-}
-
-.btn-success {
-	color: #FFFFFF;
-	background: var(--color-secondary);
-	box-shadow: 0 12px 26px rgba(35, 118, 98, .20);
-}
-
-.btn-success:hover {
-	background: var(--color-secondary-hover);
-}
-
-.btn-secondary {
-	color: var(--color-primary);
-	background: var(--color-surface);
-	border-color: var(--color-border);
-}
-
-.btn-secondary:hover {
-	background: var(--color-primary-soft);
-	border-color: #AFC4D5;
-}
-
-.nav-link {
-	color: var(--color-text-muted);
-}
-
-.nav-link:hover, .nav-link.active {
-	color: var(--color-primary);
-	background: var(--color-accent-soft);
-}
-
-.bg-beacon-navy {
-	background-color: var(--color-primary) !important;
-}
-
-.text-beacon-navy {
-	color: var(--color-primary) !important;
-}
-
-.text-beacon-blue {
-	color: var(--color-info) !important;
-}
-
-.text-beacon-green {
-	color: var(--color-secondary) !important;
-}
-
-.bg-beacon-blue {
-	background-color: var(--color-info) !important;
-}
-
-.bg-beacon-green {
-	background-color: var(--color-secondary) !important;
-}
-
-.badge {
-	display: inline-flex;
-	align-items: center;
-	gap: .4rem;
-	min-height: 1.75rem;
-	border-radius: 999px;
-	padding: .3rem .7rem;
-	font-size: .75rem;
-	font-weight: 800;
-	line-height: 1;
-}
-
-.badge-brand {
-	color: var(--color-secondary-hover);
-	background: var(--color-secondary-soft);
-}
-
-.badge-accent {
-	color: var(--color-accent-hover);
-	background: var(--color-accent-soft);
-}
-
-.badge-neutral {
-	color: var(--color-text-muted);
-	background: var(--color-surface-soft);
-}
-
-.section-kicker {
-	color: var(--color-secondary);
-	font-size: .875rem;
-	font-weight: 900;
-	letter-spacing: .06em;
-	text-transform: uppercase;
-}
-
-.section-title {
-	color: var(--color-primary);
-	font-weight: 900;
-	letter-spacing: -.035em;
-}
-
-.section-copy {
-	color: var(--color-text-muted);
-	line-height: 1.8;
-}
-</style>
-
 </head>
 <body class="min-h-screen antialiased">
+	<c:if test="${not empty successMessage}">
+		<div
+			class="mx-auto mt-5 max-w-5xl rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 font-bold text-emerald-800">${successMessage}</div>
+	</c:if>
+	<c:if test="${not empty errorMessage}">
+		<div
+			class="mx-auto mt-5 max-w-5xl rounded-2xl border border-red-200 bg-red-50 px-5 py-4 font-bold text-red-700">${errorMessage}</div>
+	</c:if>
 
-	<%--
- LifeBeacon Edit Profile
- Spring MVC View: edit-profile.jsp
- Controller: GET /profile/edit
---%>
 
 	<!-- Unified application navigation. This block is intentionally duplicated in every page. -->
 	<header class="glass sticky top-0 z-50 border-b border-slate-200/70">
@@ -394,7 +174,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				class="grid h-11 w-11 place-items-center rounded-2xl bg-beacon-navy text-white shadow-soft">
 					<i data-lucide="heart-pulse" class="h-6 w-6"></i>
 			</span> <span class="text-xl font-black tracking-tight text-beacon-navy">
-					<span class="text-beacon-blue">Life</span>Beacon
+					<span class="text-beacon-green">Life</span>Beacon
 			</span>
 			</a>
 
@@ -405,7 +185,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 					class="nav-link rounded-xl px-4 py-2"
 					href="<c:url value='/inbody' />">InBody</a> <a
 					class="nav-link rounded-xl px-4 py-2"
-					href="<c:url value='/meal-circle' />">MealCircle</a> <a
+					href="<c:url value='/group-meal' />">MealCircle</a> <a
 					class="nav-link rounded-xl px-4 py-2"
 					href="<c:url value='/profile' />">Profile</a>
 			</nav>
@@ -436,7 +216,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 					class="nav-link rounded-xl px-4 py-3"
 					href="<c:url value='/inbody' />">InBody</a> <a
 					class="nav-link rounded-xl px-4 py-3"
-					href="<c:url value='/meal-circle' />">MealCircle</a> <a
+					href="<c:url value='/group-meal' />">MealCircle</a> <a
 					class="nav-link rounded-xl px-4 py-3"
 					href="<c:url value='/profile' />">Profile</a> <a
 					class="nav-link rounded-xl px-4 py-3"
@@ -448,19 +228,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 	<main class="mx-auto max-w-5xl px-5 py-10">
 		<div>
-			<p class="font-extrabold text-beacon-blue">Profile settings</p>
+			<p class="font-extrabold text-beacon-green">Profile settings</p>
 			<h1 class="mt-2 text-4xl font-black text-beacon-navy">Update
 				your health profile</h1>
 			<p class="mt-3 max-w-2xl leading-7 text-slate-500">Keep your data
 				current so future roadmaps remain relevant and safe.</p>
 		</div>
 
-		<form id="profileForm" class="mt-8 space-y-6">
+		<form id="profileForm" action="<c:url value='/profile/edit' />"
+			method="post" class="mt-8 space-y-6">
 			<!-- Account information -->
 			<section class="card p-6 sm:p-7">
 				<div class="mb-6 flex items-center gap-4">
 					<span
-						class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-50 text-beacon-blue"><i
+						class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i
 						data-lucide="user-round"></i></span>
 					<div>
 						<h2 class="text-xl font-black text-beacon-navy">Account
@@ -472,19 +253,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				<div class="grid gap-4 md:grid-cols-2">
 					<div>
 						<label class="label" for="editName">Full name</label><input
-							class="input" id="editName" value="Murad Shaheen">
+							class="input" id="editName" name="editName" value="Murad Shaheen">
 					</div>
 					<div>
 						<label class="label" for="editCity">City</label><input
-							class="input" id="editCity" value="Ramallah">
+							class="input" id="editCity" name="editCity" value="Ramallah">
 					</div>
 					<div>
 						<label class="label" for="editPhone">Phone number</label><input
-							class="input" id="editPhone" type="tel" placeholder="+970 ...">
+							class="input" id="editPhone" name="editPhone" type="tel"
+							placeholder="+970 ...">
 					</div>
 					<div>
 						<label class="label" for="editLanguage">Language</label><select
-							class="input" id="editLanguage"><option selected>English</option>
+							class="input" id="editLanguage" name="editLanguage"><option
+								selected>English</option>
 							<option>Arabic</option></select>
 					</div>
 				</div>
@@ -506,33 +289,37 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				<div class="grid gap-4 md:grid-cols-3">
 					<div>
 						<label class="label" for="editAge">Age</label><input class="input"
-							id="editAge" type="number" value="28">
+							id="editAge" name="editAge" type="number" value="28">
 					</div>
 					<div>
 						<label class="label" for="editGender">Gender</label><select
-							class="input" id="editGender"><option selected>Male</option>
+							class="input" id="editGender" name="editGender"><option
+								selected>Male</option>
 							<option>Female</option>
 							<option>Prefer not to say</option></select>
 					</div>
 					<div>
 						<label class="label" for="editBlood">Blood type</label><select
-							class="input" id="editBlood"><option selected>O+</option>
+							class="input" id="editBlood" name="editBlood"><option
+								selected>O+</option>
 							<option>A+</option>
 							<option>B+</option>
 							<option>AB+</option></select>
 					</div>
 					<div>
 						<label class="label" for="editHeight">Height (cm)</label><input
-							class="input" id="editHeight" type="number" step="0.1"
-							value="178">
+							class="input" id="editHeight" name="editHeight" type="number"
+							step="0.1" value="178">
 					</div>
 					<div>
 						<label class="label" for="editWeight">Current weight (kg)</label><input
-							class="input" id="editWeight" type="number" step="0.1" value="82">
+							class="input" id="editWeight" name="editWeight" type="number"
+							step="0.1" value="82">
 					</div>
 					<div>
 						<label class="label" for="editTarget">Target weight (kg)</label><input
-							class="input" id="editTarget" type="number" step="0.1" value="76">
+							class="input" id="editTarget" name="editTarget" type="number"
+							step="0.1" value="76">
 					</div>
 				</div>
 			</section>
@@ -552,30 +339,35 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				<div class="grid gap-4 md:grid-cols-2">
 					<div>
 						<label class="label" for="editActivity">Activity level</label><select
-							class="input" id="editActivity"><option>Sedentary</option>
+							class="input" id="editActivity" name="editActivity"><option>Sedentary</option>
 							<option selected>Lightly active</option>
 							<option>Active</option>
 							<option>Very active</option></select>
 					</div>
 					<div>
 						<label class="label" for="editOccupation">Occupation</label><input
-							class="input" id="editOccupation" value="Software developer">
+							class="input" id="editOccupation" name="editOccupation"
+							value="Software developer">
 					</div>
 					<div>
 						<label class="label" for="editWorkStart">Work starts</label><input
-							class="input" id="editWorkStart" type="time" value="09:00">
+							class="input" id="editWorkStart" name="editWorkStart" type="time"
+							value="09:00">
 					</div>
 					<div>
 						<label class="label" for="editWorkEnd">Work ends</label><input
-							class="input" id="editWorkEnd" type="time" value="17:00">
+							class="input" id="editWorkEnd" name="editWorkEnd" type="time"
+							value="17:00">
 					</div>
 					<div>
 						<label class="label" for="editWake">Wake-up time</label><input
-							class="input" id="editWake" type="time" value="07:00">
+							class="input" id="editWake" name="editWake" type="time"
+							value="07:00">
 					</div>
 					<div>
 						<label class="label" for="editBed">Bedtime</label><input
-							class="input" id="editBed" type="time" value="23:00">
+							class="input" id="editBed" name="editBed" type="time"
+							value="23:00">
 					</div>
 				</div>
 			</section>
@@ -595,19 +387,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				<div class="grid gap-4">
 					<div>
 						<label class="label" for="editAllergies">Allergies</label>
-						<textarea class="input" id="editAllergies" rows="2">Peanuts</textarea>
+						<textarea class="input" id="editAllergies" name="editAllergies"
+							rows="2">Peanuts</textarea>
 					</div>
 					<div>
 						<label class="label" for="editConditions">Chronic
 							conditions</label>
-						<textarea class="input" id="editConditions" rows="2"
-							placeholder="None declared"></textarea>
+						<textarea class="input" id="editConditions" name="editConditions"
+							rows="2" placeholder="None declared"></textarea>
 					</div>
 					<div>
 						<label class="label" for="editMedications">Current
 							medications</label>
-						<textarea class="input" id="editMedications" rows="2"
-							placeholder="None declared"></textarea>
+						<textarea class="input" id="editMedications"
+							name="editMedications" rows="2" placeholder="None declared"></textarea>
 					</div>
 					<div class="flex flex-col gap-3 sm:flex-row sm:gap-8">
 						<label
@@ -619,61 +412,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 				</div>
 			</section>
 
-
-			<!-- Favorite food preferences -->
-			<section class="card p-6 sm:p-7">
-				<div class="mb-6 flex items-center gap-4">
-					<span class="grid h-11 w-11 place-items-center rounded-2xl"
-						style="background: var(--color-accent-soft); color: var(--color-accent)"><i
-						data-lucide="utensils-crossed"></i></span>
-					<div>
-						<h2 class="text-xl font-black">Favorite foods</h2>
-						<p class="text-sm">Used to make recommendations enjoyable and
-							realistic.</p>
-					</div>
-				</div>
-				<div class="grid gap-4">
-					<div>
-						<label class="label" for="editFavoriteFoods">Foods you
-							love</label>
-						<textarea class="input" id="editFavoriteFoods"
-							name="favoriteFoods" rows="3">Grilled chicken, maqluba, lentil soup, pasta, apples</textarea>
-					</div>
-					<div>
-						<label class="label" for="editDislikedFoods">Foods you
-							dislike</label>
-						<textarea class="input" id="editDislikedFoods"
-							name="dislikedFoods" rows="2">Mushrooms, very spicy food</textarea>
-					</div>
-					<div class="grid gap-4 md:grid-cols-2">
-						<div>
-							<label class="label" for="editCuisine">Favorite cuisine</label><select
-								class="input" id="editCuisine"><option selected>Palestinian
-									/ Levantine</option>
-								<option>Mediterranean</option>
-								<option>Italian</option>
-								<option>Asian</option>
-								<option>Vegetarian</option></select>
-						</div>
-						<div>
-							<label class="label" for="editMealPreference">Meal
-								preference</label><select class="input" id="editMealPreference"><option
-									selected>Mix of home and restaurant meals</option>
-								<option>Mostly home cooking</option>
-								<option>Mostly restaurant meals</option>
-								<option>Quick and simple meals</option></select>
-						</div>
-					</div>
-				</div>
-			</section>
-
 			<!-- Goal and reminders -->
 			<section class="card p-6 sm:p-7">
 				<div class="grid gap-5 md:grid-cols-2">
 					<div>
 						<label class="label" for="editGoal">Primary goal</label><select
-							class="input" id="editGoal"><option selected>Lose
-								weight</option>
+							class="input" id="editGoal" name="editGoal"><option
+								selected>Lose weight</option>
 							<option>Maintain weight</option>
 							<option>Build muscle</option>
 							<option>Improve wellness</option></select>
@@ -730,9 +475,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       }
 
       // Highlight the current navigation link using the current file name.
-      const currentPage = window.location.pathname.split("/").pop() || "index.html";
+      const currentPage = window.location.pathname.replace(/\/$/, "") || "/";
       document.querySelectorAll("a.nav-link").forEach((link) => {
-        const linkPage = link.getAttribute("href");
+        const linkPage = new URL(link.href, window.location.origin).pathname.replace(/\/$/, "") || "/";
         if (linkPage === currentPage) {
           link.classList.add("active");
           link.setAttribute("aria-current", "page");
@@ -752,7 +497,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 	<script>
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("profileForm").addEventListener("submit", event => {
-        event.preventDefault();
+        
         const button = event.currentTarget.querySelector('button[type="submit"]');
         button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i> Changes saved';
         button.classList.remove("btn-primary");
