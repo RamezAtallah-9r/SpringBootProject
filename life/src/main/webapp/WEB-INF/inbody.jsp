@@ -1,524 +1,663 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeBeacon - InBody Composition</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description"
+	content="LifeBeacon AI-powered nutrition and wellness platform">
+<title>InBody reports | LifeBeacon</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        /* ========= Primary Brand ========= */
-                        beacon: {
-                            50: "#f1fbf7",
-                            100: "#dcf5eb",
-                            200: "#bcebd9",
-                            300: "#8ddbc1",
-                            400: "#55c4a3",
-                            500: "#2fa98a",
-                            600: "#21866f",
-                            700: "#1d6b5b",
-                            800: "#1b554a",
-                            900: "#18463e"
-                        },
-
-                        /* ========= Main Colors ========= */
-                        primary: "#21866f",
-                        secondary: "#123047",
-                        accent: "#F4C95D",
-
-                        /* ========= Background ========= */
-                        background: "#F7FBF9",
-                        surface: "#FFFFFF",
-                        surfaceAlt: "#F8FAFC",
-
-                        /* ========= Text ========= */
-                        heading: "#123047",
-                        body: "#475569",
-                        muted: "#94A3B8",
-
-                        /* ========= Status ========= */
-                        success: "#16A34A",
-                        warning: "#F59E0B",
-                        danger: "#DC2626",
-                        info: "#2563EB",
-
-                        /* ========= Border ========= */
-                        border: "#E2E8F0"
-                    },
-
-                    fontFamily: {
-                        sans: [
-                            "Inter",
-                            "ui-sans-serif",
-                            "system-ui",
-                            "sans-serif"
-                        ]
-                    },
-
-                    borderRadius: {
-                        card: "2rem",
-                        button: "9999px"
-                    },
-
-                    boxShadow: {
-                        soft: "0 24px 70px rgba(18,48,71,.12)",
-                        card: "0 10px 30px rgba(18,48,71,.08)",
-                        button: "0 12px 24px rgba(33,134,111,.25)"
-                    },
-
-                    transitionDuration: {
-                        400: "400ms"
-                    },
-
-                    animation: {
-                        float: "float 4s ease-in-out infinite",
-                        fade: "fade .5s ease-out"
-                    },
-
-                    keyframes: {
-                        float: {
-                            "0%,100%": {
-                                transform: "translateY(0)"
-                            },
-                            "50%": {
-                                transform: "translateY(-8px)"
-                            }
-                        },
-                        fade: {
-                            "0%": {
-                                opacity: "0",
-                                transform: "translateY(10px)"
-                            },
-                            "100%": {
-                                opacity: "1",
-                                transform: "translateY(0)"
-                            }
-                        }
-                    }
-                }
+<!-- LifeBeacon Tailwind configuration: kept inside this page intentionally -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            beacon: {
+              blue: "#279EFF",
+              navy: "#0C356A",
+              green: "#03C988",
+              sage: "#90C8AC",
+              mist: "#F4FAFF"
             }
-        };
-    </script>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-
-<body class="bg-[#F7FBF9] text-body font-sans antialiased">
-
-    <div class="min-h-screen lg:flex">
-
-        <!-- Sidebar -->
-        <aside class="border-b border-border bg-surface lg:min-h-screen lg:w-72 lg:border-r">
-
-            <div class="px-6 py-5">
-                <a href="/" class="flex items-center gap-3">
-                    <span
-                        class="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-white shadow-button animate-float">
-                        <i data-lucide="heart-pulse"></i>
-                    </span>
-
-                    <div>
-                        <p class="text-xl font-black text-secondary tracking-tight">LifeBeacon</p>
-                        <p class="text-xs text-muted">Your AI life companion</p>
-                    </div>
-                </a>
-            </div>
-
-            <nav class="flex gap-2 overflow-x-auto px-4 pb-5 lg:flex-col">
-
-                <a href="/dashboard"
-                    class="flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold text-muted hover:text-secondary transition-colors">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="/inbody"
-                    class="flex items-center gap-3 rounded-2xl bg-beacon-50 px-4 py-3 font-bold text-primary transition-all">
-                    <i data-lucide="scale" class="w-5 h-5"></i>
-                    <span>InBody</span>
-                </a>
-
-                <a href="/meal-groups"
-                    class="flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold text-muted hover:text-secondary transition-colors">
-                    <i data-lucide="cooking-pot" class="w-5 h-5"></i>
-                    <span>Food</span>
-                </a>
-
-                <a href="/profile"
-                    class="flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold text-muted hover:text-secondary transition-colors">
-                    <i data-lucide="user" class="w-5 h-5"></i>
-                    <span>Edit Profile</span>
-                </a>
-
-            </nav>
-
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-
-            <header class="flex items-center justify-between border-b border-border bg-surface px-6 py-5 lg:px-10">
-
-                <div>
-                    <p class="text-sm font-bold text-primary tracking-wide uppercase">Composition Analytics</p>
-                    <h1 class="text-3xl font-black text-secondary mt-0.5">
-                        Body Composition Metrics
-                    </h1>
-                </div>
-
-                <form action="/logout" method="post">
-                    <button
-                        class="rounded-button border border-border px-5 py-2.5 font-bold text-secondary bg-surface hover:bg-surfaceAlt transition-all shadow-card">
-                        Logout
-                    </button>
-                </form>
-
-            </header>
-
-            <!-- Page Content Grid -->
-            <div class="p-6 lg:p-10 space-y-8 animate-fade">
-
-                <!-- Stats Highlight Grid -->
-                <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                    <!-- Weight Card -->
-                    <div class="bg-surface border border-border rounded-card p-6 shadow-card relative overflow-hidden">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-muted uppercase tracking-wider">Weight</span>
-                            <div class="p-2.5 rounded-xl bg-beacon-50 text-primary">
-                                <i data-lucide="scale" class="w-5 h-5"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-baseline gap-2">
-                            <span id="current-weight" class="text-4xl font-black text-secondary">78.5</span>
-                            <span class="text-sm font-semibold text-muted">kg</span>
-                        </div>
-                        <p class="text-xs font-medium text-success flex items-center gap-1 mt-2">
-                            <i data-lucide="trending-down" class="w-3.5 h-3.5"></i>
-                            <span>-1.2 kg since last month</span>
-                        </p>
-                    </div>
-
-                    <!-- Skeletal Muscle Mass Card -->
-                    <div class="bg-surface border border-border rounded-card p-6 shadow-card relative overflow-hidden">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-muted uppercase tracking-wider">Muscle Mass</span>
-                            <div class="p-2.5 rounded-xl bg-beacon-50 text-primary">
-                                <i data-lucide="zap" class="w-5 h-5"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-baseline gap-2">
-                            <span id="current-smm" class="text-4xl font-black text-secondary">36.2</span>
-                            <span class="text-sm font-semibold text-muted">kg</span>
-                        </div>
-                        <p class="text-xs font-medium text-success flex items-center gap-1 mt-2">
-                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-                            <span>+0.4 kg since last month</span>
-                        </p>
-                    </div>
-
-                    <!-- Percent Body Fat Card -->
-                    <div class="bg-surface border border-border rounded-card p-6 shadow-card relative overflow-hidden">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-muted uppercase tracking-wider">Body Fat</span>
-                            <div class="p-2.5 rounded-xl bg-beacon-50 text-primary">
-                                <i data-lucide="activity" class="w-5 h-5"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-baseline gap-2">
-                            <span id="current-pbf" class="text-4xl font-black text-secondary">21.4</span>
-                            <span class="text-sm font-semibold text-muted">%</span>
-                        </div>
-                        <p class="text-xs font-medium text-success flex items-center gap-1 mt-2">
-                            <i data-lucide="trending-down" class="w-3.5 h-3.5"></i>
-                            <span>-1.8% since last month</span>
-                        </p>
-                    </div>
-
-                    <!-- BMR Card -->
-                    <div class="bg-surface border border-border rounded-card p-6 shadow-card relative overflow-hidden">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-muted uppercase tracking-wider">BMR Baseline</span>
-                            <div class="p-2.5 rounded-xl bg-beacon-50 text-primary">
-                                <i data-lucide="droplet" class="w-5 h-5"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-baseline gap-2">
-                            <span id="current-bmr" class="text-4xl font-black text-secondary">1,745</span>
-                            <span class="text-sm font-semibold text-muted">kcal</span>
-                        </div>
-                        <p class="text-xs font-medium text-muted mt-2">
-                            Measured metabolism engine
-                        </p>
-                    </div>
-
-                </section>
-
-                <!-- Core Action Layout -->
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-
-                    <!-- Upload & Data Input Form -->
-                    <div class="bg-surface border border-border rounded-card p-6 lg:p-8 shadow-card xl:col-span-1">
-                        <div class="flex items-center gap-3 border-b border-border pb-4 mb-6">
-                            <div class="p-2 rounded-xl bg-beacon-100 text-primary">
-                                <i data-lucide="plus" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-xl font-black text-secondary">Log New Metrics</h2>
-                                <p class="text-xs text-muted">Manual or document scan submission</p>
-                            </div>
-                        </div>
-
-                        <!-- Document Upload Simulation Dropzone -->
-                        <div
-                            class="border-2 border-dashed border-border rounded-2xl p-6 text-center hover:border-primary transition-colors cursor-pointer mb-6 bg-surfaceAlt group">
-                            <input type="file" id="inbody-file" class="hidden" accept="image/*,application/pdf">
-                            <label for="inbody-file" class="cursor-pointer flex flex-col items-center">
-                                <i data-lucide="upload-cloud"
-                                    class="w-8 h-8 text-muted group-hover:text-primary transition-colors mb-2"></i>
-                                <span class="text-sm font-bold text-secondary block">Upload InBody Scan</span>
-                                <span class="text-xs text-muted block mt-1">Supports PDF, PNG, JPG files</span>
-                            </label>
-                        </div>
-
-                        <div class="relative flex py-2 items-center mb-4">
-                            <div class="flex-grow border-t border-border"></div>
-                            <span class="flex-shrink mx-4 text-xs font-bold text-muted uppercase tracking-wider">Or
-                                enter manually</span>
-                            <div class="flex-grow border-t border-border"></div>
-                        </div>
-
-                        <!-- Form Elements -->
-                        <form id="metrics-form" class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">Scan
-                                    / Metric Date</label>
-                                <input type="date" required id="input-date"
-                                    class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">Weight
-                                        (kg)</label>
-                                    <input type="number" step="0.1" required id="input-weight" placeholder="78.5"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">Muscle
-                                        Mass (kg)</label>
-                                    <input type="number" step="0.1" required id="input-smm" placeholder="36.2"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">Body
-                                        Fat (%)</label>
-                                    <input type="number" step="0.1" required id="input-pbf" placeholder="21.4"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">Visceral
-                                        Fat</label>
-                                    <input type="number" required id="input-visceral" placeholder="8"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">TBW
-                                        (Liters)</label>
-                                    <input type="number" step="0.1" required id="input-tbw" placeholder="48.2"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-secondary uppercase tracking-wider mb-1">BMR
-                                        (kcal)</label>
-                                    <input type="number" required id="input-bmr" placeholder="1745"
-                                        class="w-full bg-surfaceAlt border border-border rounded-xl px-4 py-3 text-secondary font-medium focus:outline-none focus:border-primary transition-colors">
-                                </div>
-                            </div>
-
-                            <button type="submit"
-                                class="w-full bg-primary text-white font-bold rounded-button py-3.5 mt-2 hover:bg-beacon-700 transition-all shadow-button text-center block">
-                                Save Metric Entry
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Historical Record Timeline & Tables -->
-                    <div class="bg-surface border border-border rounded-card p-6 lg:p-8 shadow-card xl:col-span-2">
-                        <div class="flex items-center justify-between border-b border-border pb-4 mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 rounded-xl bg-beacon-100 text-primary">
-                                    <i data-lucide="calendar" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-black text-secondary">Composition History Log</h2>
-                                    <p class="text-xs text-muted">Historical diagnostic baseline updates</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Desktop Data List Table -->
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b border-border">
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">Date
-                                        </th>
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">
-                                            Weight</th>
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">
-                                            Skeletal Muscle</th>
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">Fat %
-                                        </th>
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">
-                                            Visceral</th>
-                                        <th class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider">BMR
-                                        </th>
-                                        <th
-                                            class="pb-3 text-xs font-bold text-secondary uppercase tracking-wider text-right">
-                                            Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="history-table-body" class="divide-y divide-border/60">
-                                    <!-- Baseline Mock Record 1 -->
-                                    <tr class="group">
-                                        <td class="py-4 font-bold text-secondary text-sm">2026-07-10</td>
-                                        <td class="py-4 text-sm font-medium">78.5 kg</td>
-                                        <td class="py-4 text-sm font-medium text-beacon-600">36.2 kg</td>
-                                        <td class="py-4 text-sm font-medium">21.4%</td>
-                                        <td class="py-4 text-sm font-medium">8</td>
-                                        <td class="py-4 text-sm font-medium">1,745 kcal</td>
-                                        <td class="py-4 text-right">
-                                            <button onclick="deleteRow(this)"
-                                                class="text-muted hover:text-danger p-1 rounded transition-colors">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <!-- Baseline Mock Record 2 -->
-                                    <tr class="group">
-                                        <td class="py-4 font-bold text-secondary text-sm">2026-06-05</td>
-                                        <td class="py-4 text-sm font-medium">79.7 kg</td>
-                                        <td class="py-4 text-sm font-medium text-beacon-600">35.8 kg</td>
-                                        <td class="py-4 text-sm font-medium">23.2%</td>
-                                        <td class="py-4 text-sm font-medium">9</td>
-                                        <td class="py-4 text-sm font-medium">1,732 kcal</td>
-                                        <td class="py-4 text-right">
-                                            <button onclick="deleteRow(this)"
-                                                class="text-muted hover:text-danger p-1 rounded transition-colors">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- AI Sync Alert Status Callout -->
-                        <div class="mt-8 rounded-2xl bg-surfaceAlt border border-border p-4 flex items-start gap-3.5">
-                            <span class="p-2 rounded-xl bg-accent/20 text-secondary mt-0.5">
-                                <i data-lucide="sparkles" class="w-4 h-4"></i>
-                            </span>
-                            <div>
-                                <h4 class="text-sm font-bold text-secondary">AI Optimization Notice</h4>
-                                <p class="text-xs text-body mt-0.5 leading-relaxed">
-                                    Updating your historical records will recalibrate the active AI Daily Planning
-                                    Engine pipeline. Subsequent health roadmap iterations automatically adopt the target
-                                    metrics submitted above.
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </main>
-
-    </div>
-
-    <!-- Component Interaction Script -->
-    <script>
-        // Initialize lucide utility rendering icons
-        lucide.createIcons();
-
-        // Set dynamic current date on date field initialization default state
-        document.getElementById('input-date').valueAsDate = new Date();
-
-        // Intercept manual entry data lifecycle streams
-        const metricsForm = document.getElementById('metrics-form');
-        metricsForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Capture form parameter context
-            const logDate = document.getElementById('input-date').value;
-            const weight = document.getElementById('input-weight').value || "78.5";
-            const smm = document.getElementById('input-smm').value || "36.2";
-            const pbf = document.getElementById('input-pbf').value || "21.4";
-            const visceral = document.getElementById('input-visceral').value || "8";
-            const bmr = document.getElementById('input-bmr').value || "1745";
-
-            // Update Hero Metric Panels explicitly
-            document.getElementById('current-weight').innerText = parseFloat(weight).toFixed(1);
-            document.getElementById('current-smm').innerText = parseFloat(smm).toFixed(1);
-            document.getElementById('current-pbf').innerText = parseFloat(pbf).toFixed(1);
-            document.getElementById('current-bmr').innerText = parseInt(bmr).toLocaleString();
-
-            // Append runtime row elements straight into DOM view tree structures
-            const tableBody = document.getElementById('history-table-body');
-            const newRow = document.createElement('tr');
-            newRow.className = "group border-b border-border/60";
-            newRow.innerHTML = `
-                    <td class="py-4 font-bold text-secondary text-sm">${logDate}</td>
-                    <td class="py-4 text-sm font-medium">${weight} kg</td>
-                    <td class="py-4 text-sm font-medium text-beacon-600">${smm} kg</td>
-                    <td class="py-4 text-sm font-medium">${pbf}%</td>
-                    <td class="py-4 text-sm font-medium">${visceral}</td>
-                    <td class="py-4 text-sm font-medium">${parseInt(bmr).toLocaleString()} kcal</td>
-                    <td class="py-4 text-right">
-                        <button onclick="deleteRow(this)" class="text-muted hover:text-danger p-1 rounded transition-colors">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </td>
-                `;
-
-            tableBody.insertBefore(newRow, tableBody.firstChild);
-            lucide.createIcons();
-            metricsForm.reset();
-            document.getElementById('input-date').valueAsDate = new Date();
-        });
-
-        // Delete action behavior node removal logic loop execution
-        function deleteRow(btnElement) {
-            const operationalRowElement = btnElement.closest('tr');
-            if (operationalRowElement) {
-                operationalRowElement.remove();
-            }
+          },
+          boxShadow: {
+            soft: "0 18px 50px rgba(12, 53, 106, 0.10)"
+          },
+          borderRadius: {
+            "4xl": "2rem"
+          }
         }
-    </script>
+      }
+    };
+  </script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- Page-specific reusable styles. These can be moved to a CSS file later. -->
+<style>
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background: radial-gradient(circle at 10% 0%, rgba(39, 158, 255, .10),
+		transparent 30rem),
+		radial-gradient(circle at 95% 15%, rgba(3, 201, 136, .08), transparent
+		28rem), #f8fbff;
+	color: #0f172a;
+}
+
+.glass {
+	background: rgba(255, 255, 255, .84);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
+
+.card {
+	background: white;
+	border: 1px solid rgba(148, 163, 184, .20);
+	border-radius: 1.5rem;
+	box-shadow: 0 18px 50px rgba(12, 53, 106, .08);
+}
+
+.input {
+	width: 100%;
+	border: 1px solid #dbe4ee;
+	border-radius: .95rem;
+	padding: .85rem 1rem;
+	background: white;
+	outline: none;
+	transition: .2s ease;
+}
+
+.input:focus {
+	border-color: #279EFF;
+	box-shadow: 0 0 0 4px rgba(39, 158, 255, .12);
+}
+
+.label {
+	display: block;
+	font-size: .875rem;
+	font-weight: 700;
+	color: #334155;
+	margin-bottom: .45rem;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: .5rem;
+	min-height: 2.85rem;
+	border-radius: .95rem;
+	padding: .75rem 1.1rem;
+	font-weight: 800;
+	transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.btn:hover {
+	transform: translateY(-1px);
+}
+
+.btn-primary {
+	color: white;
+	background: linear-gradient(135deg, #279EFF, #167fd5);
+	box-shadow: 0 12px 28px rgba(39, 158, 255, .25);
+}
+
+.btn-secondary {
+	color: #0C356A;
+	background: white;
+	border: 1px solid #dbe4ee;
+}
+
+.btn-success {
+	color: white;
+	background: linear-gradient(135deg, #03C988, #02aa73);
+	box-shadow: 0 12px 28px rgba(3, 201, 136, .20);
+}
+
+.nav-link {
+	color: #475569;
+	font-weight: 700;
+	transition: color .2s ease, background .2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+	color: #0C356A;
+	background: rgba(39, 158, 255, .10);
+}
+
+.fade-up {
+	animation: fadeUp .55s ease both;
+}
+
+@
+keyframes fadeUp {from { opacity:0;
+	transform: translateY(12px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+}
+</style>
+
+
+<!-- Strategic LifeBeacon color system: 60% neutrals, 30% brand structure, 10% action accent -->
+<style>
+:root {
+	/* 60% — dominant neutral foundation */
+	--color-canvas: #F7F9F7;
+	--color-surface: #FFFFFF;
+	--color-surface-soft: #F1F6F4;
+	--color-border: #D8E3DF;
+	--color-text: #24313D;
+	--color-text-muted: #52606D;
+	--color-text-subtle: #667784;
+	/* 30% — brand structure: AI trust + wellness vitality */
+	--color-primary: #16324F;
+	--color-primary-hover: #0F2740;
+	--color-primary-soft: #EAF1F7;
+	--color-secondary: #237662;
+	--color-secondary-hover: #195A4B;
+	--color-secondary-soft: #E8F5F1;
+	--color-secondary-border: #A9D6C8;
+	/* 10% — warm action accent */
+	--color-accent: #C94335;
+	--color-accent-hover: #A93429;
+	--color-accent-active: #8E2B23;
+	--color-accent-soft: #FCEDEA;
+	--color-accent-border: #F0B8B1;
+	/* Semantic UI colors */
+	--color-success: #237662;
+	--color-success-soft: #E8F5F1;
+	--color-warning: #8B5E00;
+	--color-warning-soft: #FFF4D6;
+	--color-danger: #B42318;
+	--color-danger-soft: #FDECEA;
+	--color-info: #245E91;
+	--color-info-soft: #EAF3FB;
+	/* Focus and depth */
+	--focus-ring: rgba(201, 67, 53, .28);
+	--shadow-card: 0 18px 48px rgba(22, 50, 79, .09);
+	--shadow-hover: 0 22px 55px rgba(22, 50, 79, .14);
+}
+
+body {
+	color: var(--color-text);
+	background: radial-gradient(circle at 8% 0%, rgba(35, 118, 98, .10),
+		transparent 28rem),
+		radial-gradient(circle at 96% 10%, rgba(22, 50, 79, .09), transparent
+		30rem), var(--color-canvas);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--color-primary);
+}
+
+p, li {
+	color: var(--color-text-muted);
+}
+
+small, .text-slate-400, .text-slate-500 {
+	color: var(--color-text-muted) !important;
+}
+
+a {
+	text-underline-offset: .2em;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+	textarea:focus-visible {
+	outline: 3px solid var(--focus-ring);
+	outline-offset: 3px;
+}
+
+.glass {
+	background: rgba(247, 249, 247, .90);
+	border-color: var(--color-border) !important;
+}
+
+.card {
+	background: var(--color-surface);
+	border-color: var(--color-border);
+	box-shadow: var(--shadow-card);
+	transition: transform .2s ease, box-shadow .2s ease, border-color .2s
+		ease;
+}
+
+.card:hover {
+	box-shadow: var(--shadow-hover);
+}
+
+.input {
+	color: var(--color-text);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.input::placeholder {
+	color: #71808C;
+}
+
+.input:hover {
+	border-color: var(--color-secondary-border);
+}
+
+.input:focus {
+	border-color: var(--color-accent);
+	box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.btn-primary {
+	color: #FFFFFF;
+	background: var(--color-accent);
+	box-shadow: 0 12px 26px rgba(201, 67, 53, .22);
+}
+
+.btn-primary:hover {
+	background: var(--color-accent-hover);
+}
+
+.btn-primary:active {
+	background: var(--color-accent-active);
+	transform: translateY(1px);
+}
+
+.btn-success {
+	color: #FFFFFF;
+	background: var(--color-secondary);
+	box-shadow: 0 12px 26px rgba(35, 118, 98, .20);
+}
+
+.btn-success:hover {
+	background: var(--color-secondary-hover);
+}
+
+.btn-secondary {
+	color: var(--color-primary);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+	background: var(--color-primary-soft);
+	border-color: #AFC4D5;
+}
+
+.nav-link {
+	color: var(--color-text-muted);
+}
+
+.nav-link:hover, .nav-link.active {
+	color: var(--color-primary);
+	background: var(--color-accent-soft);
+}
+
+.bg-beacon-navy {
+	background-color: var(--color-primary) !important;
+}
+
+.text-beacon-navy {
+	color: var(--color-primary) !important;
+}
+
+.text-beacon-blue {
+	color: var(--color-info) !important;
+}
+
+.text-beacon-green {
+	color: var(--color-secondary) !important;
+}
+
+.bg-beacon-blue {
+	background-color: var(--color-info) !important;
+}
+
+.bg-beacon-green {
+	background-color: var(--color-secondary) !important;
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: .4rem;
+	min-height: 1.75rem;
+	border-radius: 999px;
+	padding: .3rem .7rem;
+	font-size: .75rem;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.badge-brand {
+	color: var(--color-secondary-hover);
+	background: var(--color-secondary-soft);
+}
+
+.badge-accent {
+	color: var(--color-accent-hover);
+	background: var(--color-accent-soft);
+}
+
+.badge-neutral {
+	color: var(--color-text-muted);
+	background: var(--color-surface-soft);
+}
+
+.section-kicker {
+	color: var(--color-secondary);
+	font-size: .875rem;
+	font-weight: 900;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.section-title {
+	color: var(--color-primary);
+	font-weight: 900;
+	letter-spacing: -.035em;
+}
+
+.section-copy {
+	color: var(--color-text-muted);
+	line-height: 1.8;
+}
+</style>
+
+</head>
+<body class="min-h-screen antialiased">
+
+	<%--
+ LifeBeacon InBody Page
+ Spring MVC View: inbody.jsp
+ Controller: GET /inbody
+--%>
+
+	<!-- Unified application navigation. This block is intentionally duplicated in every page. -->
+	<header class="glass sticky top-0 z-50 border-b border-slate-200/70">
+		<div
+			class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+			<a href="<c:url value='/' />" class="flex items-center gap-3"
+				aria-label="LifeBeacon home"> <span
+				class="grid h-11 w-11 place-items-center rounded-2xl bg-beacon-navy text-white shadow-soft">
+					<i data-lucide="heart-pulse" class="h-6 w-6"></i>
+			</span> <span class="text-xl font-black tracking-tight text-beacon-navy">
+					<span class="text-beacon-blue">Life</span>Beacon
+			</span>
+			</a>
+
+			<nav class="hidden items-center gap-1 lg:flex"
+				aria-label="Primary navigation">
+				<a class="nav-link rounded-xl px-4 py-2"
+					href="<c:url value='/dashboard' />">Today</a> <a
+					class="nav-link rounded-xl px-4 py-2"
+					href="<c:url value='/inbody' />">InBody</a> <a
+					class="nav-link rounded-xl px-4 py-2"
+					href="<c:url value='/meal-circle' />">MealCircle</a> <a
+					class="nav-link rounded-xl px-4 py-2"
+					href="<c:url value='/profile' />">Profile</a>
+			</nav>
+
+			<div class="hidden items-center gap-3 lg:flex">
+				<button
+					class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white text-beacon-navy"
+					aria-label="Notifications">
+					<i data-lucide="bell" class="h-5 w-5"></i>
+				</button>
+				<a href="<c:url value='/auth' />" class="btn btn-secondary">Sign
+					out</a>
+			</div>
+
+			<button id="mobileMenuButton"
+				class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white lg:hidden"
+				aria-label="Open menu" aria-expanded="false">
+				<i data-lucide="menu" class="h-5 w-5"></i>
+			</button>
+		</div>
+
+		<nav id="mobileMenu"
+			class="hidden border-t border-slate-200 bg-white px-5 py-4 lg:hidden"
+			aria-label="Mobile navigation">
+			<div class="grid gap-2">
+				<a class="nav-link rounded-xl px-4 py-3"
+					href="<c:url value='/dashboard' />">Today</a> <a
+					class="nav-link rounded-xl px-4 py-3"
+					href="<c:url value='/inbody' />">InBody</a> <a
+					class="nav-link rounded-xl px-4 py-3"
+					href="<c:url value='/meal-circle' />">MealCircle</a> <a
+					class="nav-link rounded-xl px-4 py-3"
+					href="<c:url value='/profile' />">Profile</a> <a
+					class="nav-link rounded-xl px-4 py-3"
+					href="<c:url value='/auth' />">Sign out</a>
+			</div>
+		</nav>
+	</header>
+
+
+	<main class="mx-auto max-w-7xl px-5 py-10">
+		<div>
+			<p class="font-extrabold text-beacon-blue">Optional
+				body-composition data</p>
+			<h1 class="mt-2 text-4xl font-black text-beacon-navy">InBody
+				reports</h1>
+			<p class="mt-3 max-w-2xl leading-7 text-slate-500">Upload
+				measured values to improve future plans. You can still use
+				LifeBeacon without a report.</p>
+		</div>
+
+		<section class="mt-8 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
+			<!-- Upload card -->
+			<form id="inbodyForm" class="card p-6 sm:p-7">
+				<div class="flex items-start gap-4">
+					<span
+						class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-beacon-blue"><i
+						data-lucide="file-up"></i></span>
+					<div>
+						<h2 class="text-2xl font-black text-beacon-navy">Add a report</h2>
+						<p class="mt-1 text-sm text-slate-500">PDF or image with
+							optional manual values.</p>
+					</div>
+				</div>
+
+				<label id="dropZone"
+					class="mt-6 grid cursor-pointer place-items-center rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center transition hover:border-beacon-blue hover:bg-blue-50/40">
+					<i data-lucide="upload-cloud" class="h-9 w-9 text-beacon-blue"></i>
+					<b class="mt-3 text-beacon-navy">Choose a report file</b> <span
+					id="fileName" class="mt-1 text-sm text-slate-500">PDF, PNG,
+						or JPG</span> <input id="reportFile" class="hidden" type="file"
+					accept=".pdf,image/*" required>
+				</label>
+
+				<div class="mt-5 grid grid-cols-2 gap-4">
+					<div>
+						<label class="label" for="reportWeight">Weight (kg)</label><input
+							class="input" id="reportWeight" type="number" step="0.1"
+							placeholder="82.0">
+					</div>
+					<div>
+						<label class="label" for="muscleMass">Muscle mass (kg)</label><input
+							class="input" id="muscleMass" type="number" step="0.1"
+							placeholder="35.4">
+					</div>
+					<div>
+						<label class="label" for="fatPercentage">Body fat (%)</label><input
+							class="input" id="fatPercentage" type="number" step="0.1"
+							placeholder="21.5">
+					</div>
+					<div>
+						<label class="label" for="bmr">BMR (kcal)</label><input
+							class="input" id="bmr" type="number" placeholder="1740">
+					</div>
+				</div>
+
+				<button class="btn btn-primary mt-6 w-full" type="submit">
+					<i data-lucide="save" class="h-5 w-5"></i> Save report
+				</button>
+			</form>
+
+			<!-- History card -->
+			<article class="card p-6 sm:p-7">
+				<div class="flex items-center justify-between gap-4">
+					<div>
+						<p class="text-sm font-extrabold text-beacon-green">Your
+							measurements</p>
+						<h2 class="mt-1 text-2xl font-black text-beacon-navy">Report
+							history</h2>
+					</div>
+					<button class="btn btn-secondary py-2 text-sm">
+						<i data-lucide="arrow-down-to-line" class="h-4 w-4"></i> Export
+					</button>
+				</div>
+
+				<div class="mt-6 space-y-4">
+					<div class="rounded-2xl border border-slate-200 p-5">
+						<div class="flex items-center justify-between">
+							<div>
+								<b class="text-beacon-navy">July 12, 2026</b>
+								<p class="mt-1 text-sm text-slate-500">Confirmed report</p>
+							</div>
+							<span
+								class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">Current</span>
+						</div>
+						<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+							<div>
+								<small class="text-slate-500">Weight</small><b
+									class="mt-1 block text-beacon-navy">82.0 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Muscle</small><b
+									class="mt-1 block text-beacon-navy">35.4 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Body fat</small><b
+									class="mt-1 block text-beacon-navy">21.5%</b>
+							</div>
+							<div>
+								<small class="text-slate-500">BMR</small><b
+									class="mt-1 block text-beacon-navy">1,740</b>
+							</div>
+						</div>
+					</div>
+
+					<div class="rounded-2xl border border-slate-200 p-5">
+						<div class="flex items-center justify-between">
+							<div>
+								<b class="text-beacon-navy">June 02, 2026</b>
+								<p class="mt-1 text-sm text-slate-500">Previous report</p>
+							</div>
+							<span
+								class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">Archived</span>
+						</div>
+						<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+							<div>
+								<small class="text-slate-500">Weight</small><b
+									class="mt-1 block text-beacon-navy">84.1 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Muscle</small><b
+									class="mt-1 block text-beacon-navy">34.8 kg</b>
+							</div>
+							<div>
+								<small class="text-slate-500">Body fat</small><b
+									class="mt-1 block text-beacon-navy">23.2%</b>
+							</div>
+							<div>
+								<small class="text-slate-500">BMR</small><b
+									class="mt-1 block text-beacon-navy">1,712</b>
+							</div>
+						</div>
+					</div>
+				</div>
+			</article>
+		</section>
+	</main>
+
+
+	<!-- Unified footer -->
+	<footer class="mt-20 border-t border-slate-200 bg-white/70">
+		<div
+			class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+			<p>© 2026 LifeBeacon. Wellness support, not medical diagnosis.</p>
+			<div class="flex gap-5">
+				<a href="#" class="hover:text-beacon-navy">Privacy</a> <a href="#"
+					class="hover:text-beacon-navy">Terms</a> <a href="#"
+					class="hover:text-beacon-navy">Support</a>
+			</div>
+		</div>
+	</footer>
+
+
+	<!-- Page JavaScript. It is intentionally kept in this HTML file. -->
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Render Lucide icons after the page is loaded.
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Responsive mobile navigation.
+      const menuButton = document.getElementById("mobileMenuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", () => {
+          const isHidden = mobileMenu.classList.toggle("hidden");
+          menuButton.setAttribute("aria-expanded", String(!isHidden));
+        });
+      }
+
+      // Highlight the current navigation link using the current file name.
+      const currentPage = window.location.pathname.split("/").pop() || "index.html";
+      document.querySelectorAll("a.nav-link").forEach((link) => {
+        const linkPage = link.getAttribute("href");
+        if (linkPage === currentPage) {
+          link.classList.add("active");
+          link.setAttribute("aria-current", "page");
+        }
+      });
+
+      // Close dismissible messages.
+      document.querySelectorAll("[data-dismiss]").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest("[data-alert]")?.remove();
+        });
+      });
+    });
+  </script>
+
+
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fileInput = document.getElementById("reportFile");
+      const fileName = document.getElementById("fileName");
+      const form = document.getElementById("inbodyForm");
+
+      fileInput.addEventListener("change", () => {
+        fileName.textContent = fileInput.files[0]?.name || "PDF, PNG, or JPG";
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const button = form.querySelector('button[type="submit"]');
+        button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i> Report saved';
+        button.classList.remove("btn-primary");
+        button.classList.add("btn-success");
+        lucide.createIcons();
+      });
+    });
+  </script>
 
 </body>
-
 </html>
