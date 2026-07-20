@@ -1,169 +1,469 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthSync — Verify your email</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: { extend: {
-                    colors: { ink:'#13221E', teal:'#0E6B5C', tealdark:'#0A4A40', mint:'#E3F4EE',
-                        mint2:'#F2FAF7', paper:'#FCFDFC', line:'#DCE8E3',
-                        danger:'#B4362F', dangerbg:'#FBEAE8' },
-                    fontFamily: { display:['Manrope','sans-serif'], body:['Inter','sans-serif'] },
-                    boxShadow: { card:'0 20px 50px rgba(19,34,30,.08)', btn:'0 6px 18px rgba(14,107,92,.25)' },
-                    borderRadius: { card:'24px' },
-                }}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description"
+	content="LifeBeacon AI-powered nutrition and wellness platform">
+<title>Check your email | LifeBeacon</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- LifeBeacon Tailwind configuration: kept inside this page intentionally -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            beacon: {
+              blue: "#279EFF",
+              navy: "#0C356A",
+              green: "#03C988",
+              sage: "#90C8AC",
+              mist: "#F4FAFF"
+            }
+          },
+          boxShadow: {
+            soft: "0 18px 50px rgba(12, 53, 106, 0.10)"
+          },
+          borderRadius: {
+            "4xl": "2rem"
+          }
         }
-    </script>
-</head>
-<body class="font-body text-ink bg-paper min-h-screen flex flex-col">
+      }
+    };
+  </script>
 
-<nav class="border-b border-line bg-paper/90">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <span class="font-display font-extrabold text-teal text-xl flex items-center gap-2">
-      <span class="w-6 h-6 rounded-lg bg-teal relative
-                   after:content-[''] after:absolute after:inset-[6px] after:rounded-full
-                   after:border-2 after:border-white after:border-t-transparent after:rotate-45"></span>
-      HealthSync
-    </span>
-    </div>
-</nav>
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-<main class="flex-1 grid place-items-center px-5 py-12 bg-gradient-to-b from-mint2 to-paper">
-    <div class="bg-white border border-line rounded-card shadow-card p-9 max-w-md w-full text-center">
+<!-- Page-specific reusable styles. These can be moved to a CSS file later. -->
+<style>
+html {
+	scroll-behavior: smooth;
+}
 
-        <div class="w-16 h-16 rounded-2xl bg-mint grid place-items-center text-3xl mx-auto mb-4">📧</div>
-        <h1 class="font-display font-extrabold text-2xl mb-2">Check your email</h1>
-        <p class="text-sm text-ink/60">We sent a 6-digit verification code to<br>
-            <b id="email" class="text-ink">your email</b></p>
+body {
+	background: radial-gradient(circle at 10% 0%, rgba(39, 158, 255, .10),
+		transparent 30rem),
+		radial-gradient(circle at 95% 15%, rgba(3, 201, 136, .08), transparent
+		28rem), #f8fbff;
+	color: #0f172a;
+}
 
-        <p class="text-xs text-ink/60 bg-mint2 border border-line rounded-xl px-4 py-2.5 my-5">
-            🛡 This extra step keeps your account and health data safe — we just want to make sure it's really you.</p>
+.glass {
+	background: rgba(255, 255, 255, .84);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
 
-        <!-- 6 digit boxes -->
-        <div id="boxes" class="flex justify-center gap-2.5 mb-2" dir="ltr">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 1" class="box">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 2" class="box">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 3" class="box">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 4" class="box">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 5" class="box">
-            <input type="text" inputmode="numeric" maxlength="1" aria-label="digit 6" class="box">
-        </div>
+.card {
+	background: white;
+	border: 1px solid rgba(148, 163, 184, .20);
+	border-radius: 1.5rem;
+	box-shadow: 0 18px 50px rgba(12, 53, 106, .08);
+}
 
-        <p id="msg" class="text-xs min-h-[1.2em] mb-4 invisible"></p>
+.input {
+	width: 100%;
+	border: 1px solid #dbe4ee;
+	border-radius: .95rem;
+	padding: .85rem 1rem;
+	background: white;
+	outline: none;
+	transition: .2s ease;
+}
 
-        <button id="verifyBtn" onclick="verify()"
-                class="w-full bg-teal text-white font-display font-bold rounded-full py-3.5 shadow-btn
-                   hover:bg-tealdark hover:-translate-y-px transition
-                   disabled:opacity-60 disabled:cursor-wait">Verify & Continue</button>
+.input:focus {
+	border-color: #279EFF;
+	box-shadow: 0 0 0 4px rgba(39, 158, 255, .12);
+}
 
-        <p class="text-sm text-ink/60 mt-5">Didn't get it? Check spam, or
-            <button id="resend" onclick="resend()" disabled
-                    class="text-teal font-semibold disabled:text-ink/30">Resend code</button>
-            <span id="timer" class="font-bold text-ink">(60s)</span></p>
+.label {
+	display: block;
+	font-size: .875rem;
+	font-weight: 700;
+	color: #334155;
+	margin-bottom: .45rem;
+}
 
-        <a href="auth.html" class="inline-block mt-4 text-sm text-teal font-semibold hover:underline">← Back to login</a>
-    </div>
-</main>
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: .5rem;
+	min-height: 2.85rem;
+	border-radius: .95rem;
+	padding: .75rem 1.1rem;
+	font-weight: 800;
+	transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
 
-<footer class="border-t border-line bg-mint2 py-5 text-center text-xs text-ink/60">
-    © 2026 HealthSync · A wellness coach, not a doctor
-</footer>
+.btn:hover {
+	transform: translateY(-1px);
+}
 
-<style type="text/tailwindcss">
-    .box{ @apply w-12 h-14 md:w-[52px] md:h-[60px] text-center text-2xl font-display font-extrabold
-    border-[1.5px] border-line rounded-xl bg-paper
-    focus:outline-none focus:border-teal focus:bg-white focus:ring-[3px] focus:ring-teal/10 transition; }
-    .box.bad{ @apply border-danger bg-dangerbg; }
+.btn-primary {
+	color: white;
+	background: linear-gradient(135deg, #279EFF, #167fd5);
+	box-shadow: 0 12px 28px rgba(39, 158, 255, .25);
+}
+
+.btn-secondary {
+	color: #0C356A;
+	background: white;
+	border: 1px solid #dbe4ee;
+}
+
+.btn-success {
+	color: white;
+	background: linear-gradient(135deg, #03C988, #02aa73);
+	box-shadow: 0 12px 28px rgba(3, 201, 136, .20);
+}
+
+.nav-link {
+	color: #475569;
+	font-weight: 700;
+	transition: color .2s ease, background .2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+	color: #0C356A;
+	background: rgba(39, 158, 255, .10);
+}
+
+.fade-up {
+	animation: fadeUp .55s ease both;
+}
+
+@
+keyframes fadeUp {from { opacity:0;
+	transform: translateY(12px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+}
 </style>
 
-<script>
-    const API = "http://localhost:8080";
 
-    /* the login page passed the email in the URL: verify-email.html?email=... */
-    const email = new URLSearchParams(location.search).get('email') || '';
-    document.getElementById('email').textContent = email || 'your email';
+<!-- Strategic LifeBeacon color system: 60% neutrals, 30% brand structure, 10% action accent -->
+<style>
+:root {
+	/* 60% — dominant neutral foundation */
+	--color-canvas: #F7F9F7;
+	--color-surface: #FFFFFF;
+	--color-surface-soft: #F1F6F4;
+	--color-border: #D8E3DF;
+	--color-text: #24313D;
+	--color-text-muted: #52606D;
+	--color-text-subtle: #667784;
+	/* 30% — brand structure: AI trust + wellness vitality */
+	--color-primary: #16324F;
+	--color-primary-hover: #0F2740;
+	--color-primary-soft: #EAF1F7;
+	--color-secondary: #237662;
+	--color-secondary-hover: #195A4B;
+	--color-secondary-soft: #E8F5F1;
+	--color-secondary-border: #A9D6C8;
+	/* 10% — warm action accent */
+	--color-accent: #C94335;
+	--color-accent-hover: #A93429;
+	--color-accent-active: #8E2B23;
+	--color-accent-soft: #FCEDEA;
+	--color-accent-border: #F0B8B1;
+	/* Semantic UI colors */
+	--color-success: #237662;
+	--color-success-soft: #E8F5F1;
+	--color-warning: #8B5E00;
+	--color-warning-soft: #FFF4D6;
+	--color-danger: #B42318;
+	--color-danger-soft: #FDECEA;
+	--color-info: #245E91;
+	--color-info-soft: #EAF3FB;
+	/* Focus and depth */
+	--focus-ring: rgba(201, 67, 53, .28);
+	--shadow-card: 0 18px 48px rgba(22, 50, 79, .09);
+	--shadow-hover: 0 22px 55px rgba(22, 50, 79, .14);
+}
 
-    const boxes=[...document.querySelectorAll('.box')];
-    const msg=document.getElementById('msg');
+body {
+	color: var(--color-text);
+	background: radial-gradient(circle at 8% 0%, rgba(35, 118, 98, .10),
+		transparent 28rem),
+		radial-gradient(circle at 96% 10%, rgba(22, 50, 79, .09), transparent
+		30rem), var(--color-canvas);
+}
 
-    function say(text, good=false){
-        msg.textContent=text;
-        msg.className='text-xs min-h-[1.2em] mb-4 ' + (good?'text-teal':'text-danger');
-    }
-    function clearSay(){ msg.className='text-xs min-h-[1.2em] mb-4 invisible'; }
+h1, h2, h3, h4, h5, h6 {
+	color: var(--color-primary);
+}
 
-    /* ---------- digit box behaviour ---------- */
-    boxes.forEach((b,i)=>{
-        b.addEventListener('input',()=>{
-            b.value=b.value.replace(/\D/g,''); b.classList.remove('bad'); clearSay();
-            if(b.value && i<5) boxes[i+1].focus();
+p, li {
+	color: var(--color-text-muted);
+}
+
+small, .text-slate-400, .text-slate-500 {
+	color: var(--color-text-muted) !important;
+}
+
+a {
+	text-underline-offset: .2em;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+	textarea:focus-visible {
+	outline: 3px solid var(--focus-ring);
+	outline-offset: 3px;
+}
+
+.glass {
+	background: rgba(247, 249, 247, .90);
+	border-color: var(--color-border) !important;
+}
+
+.card {
+	background: var(--color-surface);
+	border-color: var(--color-border);
+	box-shadow: var(--shadow-card);
+	transition: transform .2s ease, box-shadow .2s ease, border-color .2s
+		ease;
+}
+
+.card:hover {
+	box-shadow: var(--shadow-hover);
+}
+
+.input {
+	color: var(--color-text);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.input::placeholder {
+	color: #71808C;
+}
+
+.input:hover {
+	border-color: var(--color-secondary-border);
+}
+
+.input:focus {
+	border-color: var(--color-accent);
+	box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.btn-primary {
+	color: #FFFFFF;
+	background: var(--color-accent);
+	box-shadow: 0 12px 26px rgba(201, 67, 53, .22);
+}
+
+.btn-primary:hover {
+	background: var(--color-accent-hover);
+}
+
+.btn-primary:active {
+	background: var(--color-accent-active);
+	transform: translateY(1px);
+}
+
+.btn-success {
+	color: #FFFFFF;
+	background: var(--color-secondary);
+	box-shadow: 0 12px 26px rgba(35, 118, 98, .20);
+}
+
+.btn-success:hover {
+	background: var(--color-secondary-hover);
+}
+
+.btn-secondary {
+	color: var(--color-primary);
+	background: var(--color-surface);
+	border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+	background: var(--color-primary-soft);
+	border-color: #AFC4D5;
+}
+
+.nav-link {
+	color: var(--color-text-muted);
+}
+
+.nav-link:hover, .nav-link.active {
+	color: var(--color-primary);
+	background: var(--color-accent-soft);
+}
+
+.bg-beacon-navy {
+	background-color: var(--color-primary) !important;
+}
+
+.text-beacon-navy {
+	color: var(--color-primary) !important;
+}
+
+.text-beacon-blue {
+	color: var(--color-info) !important;
+}
+
+.text-beacon-green {
+	color: var(--color-secondary) !important;
+}
+
+.bg-beacon-blue {
+	background-color: var(--color-info) !important;
+}
+
+.bg-beacon-green {
+	background-color: var(--color-secondary) !important;
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: .4rem;
+	min-height: 1.75rem;
+	border-radius: 999px;
+	padding: .3rem .7rem;
+	font-size: .75rem;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.badge-brand {
+	color: var(--color-secondary-hover);
+	background: var(--color-secondary-soft);
+}
+
+.badge-accent {
+	color: var(--color-accent-hover);
+	background: var(--color-accent-soft);
+}
+
+.badge-neutral {
+	color: var(--color-text-muted);
+	background: var(--color-surface-soft);
+}
+
+.section-kicker {
+	color: var(--color-secondary);
+	font-size: .875rem;
+	font-weight: 900;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.section-title {
+	color: var(--color-primary);
+	font-weight: 900;
+	letter-spacing: -.035em;
+}
+
+.section-copy {
+	color: var(--color-text-muted);
+	line-height: 1.8;
+}
+</style>
+
+</head>
+<body class="min-h-screen antialiased">
+
+	<%--
+ LifeBeacon Check Email
+ Spring MVC View: check-email.jsp
+ Controller: GET /check-email
+--%>
+
+
+	<main class="grid min-h-screen place-items-center px-5 py-10">
+		<section class="card w-full max-w-xl p-8 text-center sm:p-12">
+			<div
+				class="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-blue-50 text-beacon-blue">
+				<i data-lucide="mail-check" class="h-10 w-10"></i>
+			</div>
+			<p class="mt-7 font-extrabold text-beacon-green">Account created
+				successfully</p>
+			<h1 class="mt-2 text-4xl font-black text-beacon-navy">Check your
+				email</h1>
+			<p class="mx-auto mt-4 max-w-md leading-7 text-slate-500">
+				We sent a verification link to <strong class="text-beacon-navy">murad@example.com</strong>.
+				Open it to continue your health onboarding.
+			</p>
+
+			<div
+				class="mt-7 rounded-2xl bg-slate-50 p-4 text-left text-sm text-slate-600">
+				<p class="flex gap-3">
+					<i data-lucide="info"
+						class="mt-0.5 h-5 w-5 shrink-0 text-beacon-blue"></i><span>Placeholder
+						mode is enabled. In Spring Boot, replace this interaction with the
+						SendGrid verification flow.</span>
+				</p>
+			</div>
+
+			<a href="<c:url value='/onboarding' />"
+				class="btn btn-primary mt-7 w-full">Continue in placeholder mode
+				<i data-lucide="arrow-right" class="h-5 w-5"></i>
+			</a>
+			<button class="mt-5 text-sm font-extrabold text-beacon-blue"
+				type="button">Resend verification email</button>
+			<p class="mt-6 text-sm text-slate-500">
+				Wrong address? <a class="font-bold text-beacon-navy"
+					href="<c:url value='/auth' />">Return to registration</a>
+			</p>
+		</section>
+	</main>
+
+
+
+	<!-- Page JavaScript. It is intentionally kept in this HTML file. -->
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Render Lucide icons after the page is loaded.
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Responsive mobile navigation.
+      const menuButton = document.getElementById("mobileMenuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", () => {
+          const isHidden = mobileMenu.classList.toggle("hidden");
+          menuButton.setAttribute("aria-expanded", String(!isHidden));
         });
-        b.addEventListener('keydown',e=>{
-            if(e.key==='Backspace' && !b.value && i>0) boxes[i-1].focus();
-        });
-        b.addEventListener('paste',e=>{
-            const d=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);
-            if(d){ e.preventDefault();
-                d.split('').forEach((c,j)=>{ if(boxes[j]) boxes[j].value=c; });
-                boxes[Math.min(d.length,5)].focus(); }
-        });
-    });
+      }
 
-    /* ---------- verify against the Spring backend ---------- */
-    async function verify(){
-        const code=boxes.map(b=>b.value).join('');
-        if(code.length<6){
-            boxes.forEach(b=>{ if(!b.value) b.classList.add('bad'); });
-            say('Please enter all 6 digits.'); return;
+      // Highlight the current navigation link using the current file name.
+      const currentPage = window.location.pathname.split("/").pop() || "index.html";
+      document.querySelectorAll("a.nav-link").forEach((link) => {
+        const linkPage = link.getAttribute("href");
+        if (linkPage === currentPage) {
+          link.classList.add("active");
+          link.setAttribute("aria-current", "page");
         }
-        const btn=document.getElementById('verifyBtn'); btn.disabled=true;
-        try{
-            const r=await fetch(API+'/api/verify-code',{method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({email, code})});
-            const data=await r.json();
-            if(data.ok){
-                say('Verified! ✓', true);
-                setTimeout(()=>alert('Verified! Next: Dashboard'), 400);
-                // Later: window.location.href = 'dashboard.html';
-            }else{
-                boxes.forEach(b=>b.classList.add('bad'));
-                say(data.error || 'Wrong or expired code');
-            }
-        }catch(e){ say('Cannot reach the server — is Spring Boot running on 8080?'); }
-        btn.disabled=false;
-    }
+      });
 
-    /* ---------- resend (login already sent the first code) ---------- */
-    async function resend(){
-        boxes.forEach(b=>{b.value='';b.classList.remove('bad')}); clearSay();
-        try{
-            const r=await fetch(API+'/api/send-code',{method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({email})});
-            const data=await r.json();
-            if(data.ok) say('A new code was sent ✓', true);
-            else say(data.error || 'Could not resend');
-        }catch(e){ say('Cannot reach the server.'); }
-        boxes[0].focus(); startTimer();
-    }
+      // Close dismissible messages.
+      document.querySelectorAll("[data-dismiss]").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest("[data-alert]")?.remove();
+        });
+      });
+    });
+  </script>
 
-    /* ---------- 60s cooldown ---------- */
-    let t;
-    function startTimer(){
-        clearInterval(t);
-        let s=60; const btn=document.getElementById('resend'), lbl=document.getElementById('timer');
-        btn.disabled=true; lbl.style.display='inline'; lbl.textContent=`(${s}s)`;
-        t=setInterval(()=>{ s--; lbl.textContent=`(${s}s)`;
-            if(s<=0){ clearInterval(t); btn.disabled=false; lbl.style.display='none'; } },1000);
-    }
-    startTimer();          // NOTE: no auto-send here - /api/login already emailed the first code
-    boxes[0].focus();
-</script>
+
 </body>
 </html>
