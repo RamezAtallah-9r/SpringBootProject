@@ -2,9 +2,12 @@ package com.axsos.Life.services;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.axsos.Life.models.HealthProfile;
 import com.axsos.Life.repositories.HealthProfileRepository;
 
+@Service
 public class HealthProfileService {
 	// Repository used to communicate with the health_profiles table
 	private final HealthProfileRepository healthProfileRepo;
@@ -15,7 +18,7 @@ public class HealthProfileService {
 		this.healthProfileRepo = healthProfileRepo;
 	}
 	
-    //create profile
+    //create health profile
 	
 	public HealthProfile save(HealthProfile healthProfile) {
 		return healthProfileRepo.save(healthProfile);

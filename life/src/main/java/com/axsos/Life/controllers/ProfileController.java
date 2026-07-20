@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
+@RequestMapping("/profile")
 public class ProfileController {
     private final HealthProfileService healthProfileService;
 
