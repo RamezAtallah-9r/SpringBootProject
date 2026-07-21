@@ -2,6 +2,7 @@ package com.axsos.Life.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,18 +40,20 @@ public class UserController {
             @Valid @ModelAttribute("newUser") User newUser,
             BindingResult result,
             @ModelAttribute("newLogin") LoginUser newLogin,
+            Model model,
             HttpSession session) {
 
         User registeredUser = userService.register(newUser, result);
 
         if (result.hasErrors()) {
+            // Tell auth.jsp to open on the Register tab (not the
+            // default Login tab) so the user actually sees these
+            // errors instead of thinking registration silently failed.
+            model.addAttribute("registrationError", true);
             return "auth";
         }
 
-        // Store logged-in user id in session
         session.setAttribute("userId", registeredUser.getId());
-
-        // Redirect to onboarding page
         return "redirect:/health-info";
     }
 
@@ -62,18 +65,19 @@ public class UserController {
             @Valid @ModelAttribute("newLogin") LoginUser newLogin,
             BindingResult result,
             @ModelAttribute("newUser") User newUser,
+            Model model,
             HttpSession session) {
 
         User loggedInUser = userService.login(newLogin, result);
 
         if (result.hasErrors()) {
+            // Login tab is already the default, but setting this keeps
+            // behavior explicit/consistent instead of relying on default.
+            model.addAttribute("loginError", true);
             return "auth";
         }
 
-        // Save user id into session
         session.setAttribute("userId", loggedInUser.getId());
-
-        // Redirect to dashboard
         return "redirect:/dashboard";
     }
 
@@ -110,7 +114,6 @@ public class UserController {
     public String logout(HttpSession session) {
 
         session.invalidate();
-
         return "redirect:/auth";
     }
 
