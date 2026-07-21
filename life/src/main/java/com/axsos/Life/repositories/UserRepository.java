@@ -15,4 +15,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
     // Returns an Optional: a container that may or may not hold a User,
     // which makes database queries safer when the object may not exist.
     Optional<User> findByEmail(String email);
+    Optional<User> findByPhone(String phone);
 }
