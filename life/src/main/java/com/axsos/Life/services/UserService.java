@@ -1,7 +1,7 @@
 package com.axsos.Life.services;
+
 import java.util.Optional;
 
-import com.axsos.Life.repositories.UserRepo;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,90 +9,71 @@ import org.springframework.validation.BindingResult;
 
 import com.axsos.Life.models.LoginUser;
 import com.axsos.Life.models.User;
+import com.axsos.Life.repositories.UserRepo;
 
+@Service
+public class UserService {
 
+    @Autowired
+    private UserRepo userRepo;
 
-    @Service
-    public class UserService {
+    // ==========================
+    // Register
+    // ==========================
+    public User register(User newUser, BindingResult result) {
 
-        // @Autowired lets Spring inject the repository for us,
-        // so we can omit writing the constructor.
-        @Autowired
-        private UserRepo userRepo;
+        // Check email exists
+        Optional<User> existingUser = userRepo.findByEmail(newUser.getEmail());
 
-        // This method will be called from the controller
-        // whenever a user submits a registration form.
-        public User register(User newUser, BindingResult result) {
-
-            // Reject if email is taken (present in database):
-            // query the database for a user with this email.
-            Optional<User> potentialUser = userRepo.findByEmail(newUser.getEmail());
-            if (potentialUser.isPresent()) {
-                // Add a custom error to the BindingResult with rejectValue
-                result.rejectValue("email", "Unique", "This email is already registered!");
-            }
-
-            // Reject if password doesn't match confirmation
-            if (!newUser.getPassword().equals(newUser.getConfirm())) {
-                result.rejectValue("confirm", "Matches", "The Confirm Password must match Password!");
-            }
-
-            // Return null if result has errors
-            // (the controller will re-render the form with the messages)
-            if (result.hasErrors()) {
-                return null;
-            }
-
-            // Hash and set password, save user to database.
-            // BCrypt.hashpw creates a hash of the user's password,
-            // and it is the HASH that we store - never the plain password.
-            String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
-            newUser.setPassword(hashed);
-            return userRepo.save(newUser);
+        if(existingUser.isPresent()) {
+            result.rejectValue("email", "Exists", "Email already exists!");
         }
 
-        // This method will be called from the controller
-        // whenever a user submits a login form.
-        public User login(LoginUser newLoginObject, BindingResult result) {
-
-            // Find user in the DB by email
-            Optional<User> potentialUser = userRepo.findByEmail(newLoginObject.getEmail());
-
-            // Reject if NOT present
-            if (!potentialUser.isPresent()) {
-                result.rejectValue("email", "Unique", "Unknown email!");
-                return null;
-            }
-
-            // The user exists: take them out of the Optional
-            User user = potentialUser.get();
-
-            // Reject if BCrypt password match fails.
-            // BCrypt.checkpw compares the entered password
-            // with the hashed password saved in the database.
-            if (!BCrypt.checkpw(newLoginObject.getPassword(), user.getPassword())) {
-                result.rejectValue("password", "Matches", "Invalid Password!");
-            }
-
-            // Return null if result has errors
-            if (result.hasErrors()) {
-                return null;
-            }
-
-            // Otherwise, return the user object
-            return user;
+        // Check password match
+        if(!newUser.getPassword().equals(newUser.getConfirm())) {
+            result.rejectValue("confirm", "Match", "Passwords don't match!");
         }
 
-        // Finds one user by their id (used to greet the logged-in
-        // user on the success page using the id saved in session)
-        public User findUserById(Long id) {
-            Optional<User> potentialUser = userRepo.findById(id);
-            if (potentialUser.isPresent()) {
-                return potentialUser.get();
-            } else {
-                return null;
-            }
+        if(result.hasErrors()) {
+            return null;
         }
+
+        // Hash password
+        String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
+        newUser.setPassword(hashed);
+
+        return userRepo.save(newUser);
     }
 
+    // ==========================
+    // Login
+    // ==========================
+    public User login(LoginUser loginUser, BindingResult result) {
 
+        Optional<User> existingUser = userRepo.findByEmail(loginUser.getEmail());
+
+        if(existingUser.isEmpty()) {
+            result.rejectValue("email", "NotFound", "Invalid Email or Password");
+            return null;
+        }
+
+        User user = existingUser.get();
+
+        if(!BCrypt.checkpw(loginUser.getPassword(), user.getPassword())) {
+            result.rejectValue("password", "Invalid", "Invalid Email or Password");
+        }
+
+        if(result.hasErrors()) {
+            return null;
+        }
+
+        return user;
+    }
+
+    // ==========================
+    // Find User
+    // ==========================
+    public User findById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
+}
