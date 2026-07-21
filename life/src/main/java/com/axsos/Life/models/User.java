@@ -32,6 +32,10 @@ public class User {
     @NotEmpty(message = "Name is required!")
     @Size(min = 2, max = 60, message = "Name must be between 2 and 60 characters")
     private String name;
+ // Name - at least 2 characters, not blank
+    @NotEmpty(message = "city is required!")
+    @Size(min = 2, max = 60, message = "city must be between 2 and 60 characters")
+    private String city;
 
     // Email - valid email format, not blank
     // (checking that it does not already exist in the database
@@ -137,5 +141,22 @@ public class User {
     public void setConfirm(String confirm) {
         this.confirm = confirm;
     }
+
+	public HealthProfile getHealthProfile() {
+		return healthProfile;
+	}
+
+	public void setHealthProfile(HealthProfile healthProfile) {
+		this.healthProfile = healthProfile;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+    
 
 }
