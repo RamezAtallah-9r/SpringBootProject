@@ -7,12 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-// ============================================================
-// AI CALL SITE #1
-// Triggered right after the Health Onboarding Wizard finishes
-// (and again on Dashboard login/Regenerate). This is the SEND ->
-// RECEIVE -> SAVE -> DISPLAY pipeline for the daily roadmap.
-// ============================================================
 @Service
 public class RoadmapEngineService {
 
@@ -35,8 +29,6 @@ public class RoadmapEngineService {
     }
 
     public Roadmap generate(User user, String triggerSource) {
-        // HealthProfileService returns a plain HealthProfile (or null),
-        // not an Optional - so we null-check instead of orElseThrow.
         HealthProfile profile = healthProfileService.findByUserId(user.getId());
         if (profile == null) {
             throw new IllegalStateException("Onboarding not complete for user " + user.getId());
@@ -45,23 +37,16 @@ public class RoadmapEngineService {
         Optional<InBodyReport> latestInBody = inBodyReportService.getLatestForUser(user.getId());
         List<Roadmap> recentHistory = roadmapService.getRecentHistory(user.getId());
 
-        // ---------- 1. SEND: build the prompt ----------
         String prompt = buildPrompt(user, profile, latestInBody, recentHistory);
 
-        // ---------- 2. RECEIVE ----------
         Map<String, Object> aiResult;
         try {
             aiResult = geminiClient.promptForJson(prompt);
         } catch (Exception e) {
-            // AI provider unavailable - serve a safe fixed fallback
-            // instead of leaving the user with no roadmap at all.
             aiResult = safeFallbackRoadmap();
         }
 
-        // ---------- 3. Deterministic safety layer (never skip this) ----------
         applySafetyRules(aiResult, profile);
-
-        // ---------- 4. SAVE ----------
         return saveRoadmap(user, triggerSource, aiResult);
     }
 
@@ -113,10 +98,11 @@ public class RoadmapEngineService {
             - Height: %s cm, Weight: %s kg, Age: %s, Gender: %s
             - Activity level: %s, Occupation: %s
             - BMR: %d kcal (%s)
-            - Pregnancy status: %s
+            - Pregnant: %s
             - Chronic conditions: %s
-            - Dietary allergies: %s
-            - Primary goal: %s, Target weight: %s kg
+            - Allergies: %s
+            - Current medications: %s
+            - Target weight: %s kg
             - Work hours: %s to %s, Bedtime: %s, Wake-up: %s
 
             YESTERDAY'S RESULTS:
@@ -126,21 +112,22 @@ public class RoadmapEngineService {
             filtering happens separately, after your response, in application code.
             Never set targetKcal below 1200.
             """.formatted(
-                profile.getCity(), profile.getHeight(), profile.getCurrentWeight(), profile.getAge(), profile.getGender(),
+                user.getCity(), profile.getHeight(), profile.getCurrentWeight(), profile.getAge(), profile.getGender(),
                 profile.getActivityLevel(), profile.getOccupation(), bmr, dataSource,
-                profile.getPregnancyStatus(),
-                profile.getChronicDiseases(),
-                profile.getDietaryAllergies(),
-                profile.getPrimaryGoal(), profile.getTargetWeight(),
+                profile.getPregnant(),
+                nullToNone(profile.getConditions()),
+                nullToNone(profile.getAllergies()),
+                nullToNone(profile.getMedications()),
+                profile.getTargetWeight(),
                 profile.getWorkStart(), profile.getWorkEnd(), profile.getBedtime(), profile.getWakeUpTime(),
                 yesterday.toString()
         );
     }
 
-    // The deterministic safety layer - runs on EVERY response, regardless
-    // of what the prompt asked for. Allergies are stored as free text
-    // (e.g. "peanuts, shellfish"), same pattern as RestaurantMeal.allergenTags,
-    // so we split on commas and check each word.
+    private String nullToNone(String value) {
+        return (value == null || value.isBlank()) ? "none" : value;
+    }
+
     @SuppressWarnings("unchecked")
     private void applySafetyRules(Map<String, Object> aiResult, HealthProfile profile) {
         Object kcalObj = aiResult.get("targetKcal");
@@ -148,7 +135,7 @@ public class RoadmapEngineService {
             aiResult.put("targetKcal", 1200);
         }
 
-        String rawAllergies = profile.getDietaryAllergies();
+        String rawAllergies = profile.getAllergies();
         if (rawAllergies == null || rawAllergies.isBlank()
                 || rawAllergies.trim().equalsIgnoreCase("none")) {
             return;
@@ -225,8 +212,6 @@ public class RoadmapEngineService {
         return roadmap;
     }
 
-    // Used only if Gemini is unreachable - a bare-minimum safe plan
-    // so the Dashboard never shows a hard error.
     private Map<String, Object> safeFallbackRoadmap() {
         Map<String, Object> fallback = new HashMap<>();
         fallback.put("targetKcal", 1800);
