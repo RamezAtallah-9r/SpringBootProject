@@ -1,51 +1,226 @@
-# 🩺 Life Beacon
-
 <div align="center">
 
-# AI-Powered Personalized Health & Wellness Platform
+# 🩺 Life Beacon
 
-**Transforming health data into personalized daily wellness journeys through Artificial Intelligence.**
+### AI-Powered Personalized Health & Wellness Platform
 
-Built with **Java Spring Boot, JSP, MySQL, Hibernate, Tailwind CSS, and AI technologies.**
+Transforming health data into personalized daily wellness journeys through Artificial Intelligence.
+
+Built with **Java Spring Boot • JSP • MySQL • Hibernate • Tailwind CSS**
 
 ### 👨‍💻 Developed By
 
 **Murad Shaheen • Ramez Atallah • Jail Wasaya • Chaker Ibraheem**
 
----
-
-<img src="./screenshots/landpage.png" alt="Landing Page" width="90%"/>
-
 </div>
 
 ---
 
-# 🌟 Overview
+# 📖 Overview
 
-**Life Beacon** is an AI-powered full-stack health and wellness platform that empowers users to improve their lifestyle through personalized recommendations, intelligent health analysis, nutrition planning, hydration tracking, and progress monitoring.
+**Life Beacon** is a modern AI-powered health and wellness platform that helps users build healthier lifestyles through personalized daily recommendations, nutrition planning, hydration tracking, body composition analysis, and progress monitoring.
 
-Rather than simply storing health information, Life Beacon transforms user data into meaningful daily actions that encourage healthier habits and long-term wellness.
-
-By combining Artificial Intelligence with modern software engineering, the platform delivers a personalized experience tailored to every user's goals, lifestyle, and body composition.
+Instead of simply displaying health information, Life Beacon transforms user health data into practical daily actions that encourage sustainable habits and long-term wellness.
 
 ---
 
-# 📸 Project Preview
+# 📸 Application Preview
 
 ## 🏠 Landing Page
 
-<img src="./screenshots/landpage.png" alt="Landing Page"/>
+<p align="center">
+<img src="./life/screenshots/landing-page.png" width="100%" alt="Landing Page">
+</p>
 
 ---
 
 ## 📅 Personalized Daily Roadmap
 
-<img src="./screenshots/dashboard.png" alt="Dashboard"/>
+<p align="center">
+<img src="./life/screenshots/dashboard.png" width="100%" alt="Dashboard">
+</p>
 
-### Features
+---
 
-- AI-generated daily roadmap
-- Personalized calorie goals
+## 📊 InBody Report Analysis
+
+<p align="center">
+<img src="./life/screenshots/inbody.png" width="100%" alt="InBody">
+</p>
+
+---
+
+## 👤 User Profile
+
+<p align="center">
+<img src="./life/screenshots/profile.png" width="100%" alt="Profile">
+</p>
+
+---
+
+# ✨ Key Features
+
+- 🤖 AI Personalized Wellness Roadmap
+- 📊 InBody Report Management
+- 🍽️ MealCircle Nutrition Planning
+- 💧 Hydration Tracking
+- 📈 Weight & Muscle Progress Charts
+- 👤 User Health Profile
+- 🎯 Personalized Health Goals
+- 📅 Daily Timeline
+- 📱 Responsive User Interface
+
+---
+
+# 🧠 AI Personalization
+
+Life Beacon generates personalized recommendations based on:
+
+- Health Goals
+- Body Composition
+- Daily Routine
+- Nutrition Preferences
+- Hydration Needs
+- Historical Progress
+
+The AI engine transforms health information into actionable daily wellness plans.
+
+---
+
+# 🚀 Technology Stack
+
+## Backend
+
+- Java
+- Spring Boot
+- Spring MVC
+- Spring Data JPA
+- Hibernate
+- MySQL
+
+## Frontend
+
+- JSP
+- JSTL
+- HTML5
+- CSS3
+- Tailwind CSS
+- JavaScript
+
+## Tools
+
+- Eclipse STS
+- Maven
+- Git
+- GitHub
+- MySQL Workbench
+
+---
+
+# 📂 Project Structure
+
+```text
+SpringBootProject
+│
+├── README.md
+│
+├── life
+│   ├── screenshots
+│   │   ├── landing-page.png
+│   │   ├── dashboard.png
+│   │   ├── inbody.png
+│   │   └── profile.png
+│   │
+│   ├── src
+│   ├── pom.xml
+│   └── ...
+```
+
+---
+
+# 🎯 Core Modules
+
+- Authentication
+- User Profile
+- AI Wellness Engine
+- Daily Roadmap
+- MealCircle
+- Hydration Tracking
+- InBody Management
+- Progress Analytics
+- Dashboard
+
+---
+
+# 💡 Project Objectives
+
+- Promote healthier lifestyles.
+- Deliver AI-powered recommendations.
+- Simplify health tracking.
+- Encourage healthy daily habits.
+- Provide meaningful wellness insights.
+
+---
+
+# 👨‍💻 Development Team
+
+Life Beacon was collaboratively designed and developed by:
+
+| Team Member | Role |
+|-------------|------|
+| **Murad Shaheen** | Full Stack Developer |
+| **Ramez Atallah** | Full Stack Developer |
+| **Jail Wasaya** | Full Stack Developer |
+| **Chaker Ibraheem** | Full Stack Developer |
+
+---
+
+# 🤝 Collaboration
+
+This project represents the combined efforts of the Life Beacon team. Every member contributed to the analysis, design, implementation, testing, and continuous improvement of the platform, resulting in a modern AI-powered health and wellness solution.
+
+---
+
+# 🔮 Future Enhancements
+
+- AI Nutrition Assistant
+- OCR Medical Report Recognition
+- Smart Meal Recommendations
+- Weekly AI Reports
+- Mobile Application
+- Wearable Device Integration
+- Family Health Dashboard
+- Health Risk Prediction
+
+---
+
+# ❤️ Vision
+
+> **Life Beacon is more than a health tracker.**
+
+Our vision is to transform personal health information into meaningful daily guidance that empowers users to make better decisions, build healthier habits, and achieve long-term wellness goals.
+
+---
+
+# 📜 License
+
+This project was developed as a collaborative academic software engineering project by the **Life Beacon Development Team**.
+
+---
+
+<div align="center">
+
+## 🩺 Life Beacon
+
+### Building healthier habits, one day at a time.
+
+**Developed by**
+
+**Murad Shaheen • Ramez Atallah • Jail Wasaya • Chaker Ibraheem**
+
+Made with ❤️ using Java Spring Boot, Tailwind CSS, MySQL & Artificial Intelligence.
+
+</div>- Personalized calorie goals
 - Water intake tracking
 - Daily wellness activities
 - Progress monitoring
