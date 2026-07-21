@@ -1,5 +1,8 @@
 package com.axsos.Life.controllers;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.axsos.Life.models.LoginUser;
+import com.axsos.Life.models.Roadmap;
+import com.axsos.Life.models.RoadmapItem;
 import com.axsos.Life.models.User;
+import com.axsos.Life.services.RoadmapEngineService;
+import com.axsos.Life.services.RoadmapService;
 import com.axsos.Life.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +27,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoadmapService roadmapService;
+
+    @Autowired
+    private RoadmapEngineService roadmapEngineService;
 
     // ==========================================
     // Authentication Page (Login & Register)
@@ -46,9 +59,6 @@ public class UserController {
         User registeredUser = userService.register(newUser, result);
 
         if (result.hasErrors()) {
-            // Tell auth.jsp to open on the Register tab (not the
-            // default Login tab) so the user actually sees these
-            // errors instead of thinking registration silently failed.
             model.addAttribute("registrationError", true);
             return "auth";
         }
@@ -71,8 +81,6 @@ public class UserController {
         User loggedInUser = userService.login(newLogin, result);
 
         if (result.hasErrors()) {
-            // Login tab is already the default, but setting this keeps
-            // behavior explicit/consistent instead of relying on default.
             model.addAttribute("loginError", true);
             return "auth";
         }
@@ -85,11 +93,56 @@ public class UserController {
     // Dashboard
     // ==========================================
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
+    public String dashboard(HttpSession session, Model model) {
 
         if (session.getAttribute("userId") == null) {
             return "redirect:/auth";
         }
+
+        Long userId = (Long) session.getAttribute("userId");
+        User currentUser = userService.findById(userId);
+
+        if (currentUser == null) {
+            // Session points to a user that no longer exists - force
+            // a clean re-login instead of showing broken data.
+            session.invalidate();
+            return "redirect:/auth";
+        }
+
+        model.addAttribute("user", currentUser);
+
+        LocalDate today = LocalDate.now();
+        Roadmap roadmap;
+        try {
+            roadmap = roadmapService.getForUserAndDate(userId, today)
+                    .orElseGet(() -> roadmapEngineService.generate(currentUser, "LOGIN"));
+        } catch (IllegalStateException e) {
+            // No HealthProfile yet - this user hasn't finished the
+            // Health Onboarding Wizard. Send them there instead of
+            // crashing with a generic error page.
+            return "redirect:/onboarding";
+        }
+
+        model.addAttribute("roadmap", roadmap);
+        model.addAttribute("today", today);
+
+        // Calculate water actually consumed so far today by summing
+        // completed WATER items - RoadmapItem doesn't store a running
+        // total, only per-reminder status, so we add it up here.
+        List<RoadmapItem> items = roadmap.getItems();
+        int waterConsumedMl = items.stream()
+                .filter(item -> "WATER".equals(item.getCategory()))
+                .filter(item -> "DONE".equals(item.getStatus()))
+                .mapToInt(item -> item.getAmountMl() != null ? item.getAmountMl() : 0)
+                .sum();
+        model.addAttribute("waterConsumedMl", waterConsumedMl);
+
+        // Progress: how many of today's items are marked DONE
+        long doneCount = items.stream()
+                .filter(item -> "DONE".equals(item.getStatus()))
+                .count();
+        model.addAttribute("doneCount", doneCount);
+        model.addAttribute("totalCount", items.size());
 
         return "dashboard";
     }
