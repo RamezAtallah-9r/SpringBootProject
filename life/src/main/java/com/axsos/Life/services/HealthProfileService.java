@@ -1,47 +1,47 @@
 package com.axsos.Life.services;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.axsos.Life.models.HealthProfile;
 import com.axsos.Life.repositories.HealthProfileRepository;
+
 @Service
 public class HealthProfileService {
-	// Repository used to communicate with the health_profiles table
-	private final HealthProfileRepository healthProfileRepo;
 
-    //Constructor injection
-	
-	public HealthProfileService(HealthProfileRepository healthProfileRepo) {
-		this.healthProfileRepo = healthProfileRepo;
-	}
-	
-    //create profile
-	
-	public HealthProfile save(HealthProfile healthProfile) {
-		return healthProfileRepo.save(healthProfile);
-	}
-	
+    private final HealthProfileRepository healthProfileRepo;
+
+    public HealthProfileService(
+            HealthProfileRepository healthProfileRepo) {
+
+        this.healthProfileRepo = healthProfileRepo;
+    }
+
+    // Create or save
+    public HealthProfile save(HealthProfile healthProfile) {
+        return healthProfileRepo.save(healthProfile);
+    }
+
+    // Find by profile ID
     public HealthProfile findById(Long id) {
-
-        Optional<HealthProfile> optionalProfile =
-                healthProfileRepo.findById(id);
-
-        return optionalProfile.orElse(null);
+        return healthProfileRepo.findById(id).orElse(null);
     }
-    
-    // Find the profile belonging to a user
+
+    // Find profile belonging to a user
     public HealthProfile findByUserId(Long userId) {
-
-        Optional<HealthProfile> optionalProfile =
-                healthProfileRepo.findByUserId(userId);
-
-        return optionalProfile.orElse(null);
+        return healthProfileRepo.findByUserId(userId).orElse(null);
     }
-    
+
+    // Check whether user already has a profile
+    public boolean userHasProfile(Long userId) {
+        return healthProfileRepo.existsByUserId(userId);
+    }
+
     // Update profile
     public HealthProfile update(HealthProfile updatedProfile) {
+
+        if (updatedProfile.getId() == null) {
+            return null;
+        }
 
         HealthProfile existingProfile =
                 findById(updatedProfile.getId());
@@ -51,11 +51,14 @@ public class HealthProfileService {
         }
 
         existingProfile.setAge(updatedProfile.getAge());
-        existingProfile.setBloodType(updatedProfile.getBloodType());
         existingProfile.setGender(updatedProfile.getGender());
+        existingProfile.setBloodType(updatedProfile.getBloodType());
         existingProfile.setHeight(updatedProfile.getHeight());
         existingProfile.setCurrentWeight(
                 updatedProfile.getCurrentWeight()
+        );
+        existingProfile.setTargetWeight(
+                updatedProfile.getTargetWeight()
         );
 
         existingProfile.setActivityLevel(
@@ -64,42 +67,39 @@ public class HealthProfileService {
         existingProfile.setOccupation(
                 updatedProfile.getOccupation()
         );
-        existingProfile.setCity(updatedProfile.getCity());
         existingProfile.setWorkStart(
                 updatedProfile.getWorkStart()
         );
         existingProfile.setWorkEnd(
                 updatedProfile.getWorkEnd()
         );
-        existingProfile.setBedtime(
-                updatedProfile.getBedtime()
-        );
         existingProfile.setWakeUpTime(
                 updatedProfile.getWakeUpTime()
         );
-
-        existingProfile.setPregnancyStatus(
-                updatedProfile.getPregnancyStatus()
-        );
-        existingProfile.setDietaryAllergies(
-                updatedProfile.getDietaryAllergies()
-        );
-        existingProfile.setChronicDiseases(
-                updatedProfile.getChronicDiseases()
-        );
-        existingProfile.setStrictHardBlock(
-                updatedProfile.isStrictHardBlock()
+        existingProfile.setBedtime(
+                updatedProfile.getBedtime()
         );
 
-        existingProfile.setPrimaryGoal(
-                updatedProfile.getPrimaryGoal()
+        existingProfile.setAllergies(
+                updatedProfile.getAllergies()
         );
-        existingProfile.setTargetWeight(
-                updatedProfile.getTargetWeight()
+        existingProfile.setConditions(
+                updatedProfile.getConditions()
+        );
+        existingProfile.setMedications(
+                updatedProfile.getMedications()
+        );
+        existingProfile.setPregnant(
+                updatedProfile.getPregnant()
+        );
+        existingProfile.setEatingDisorderHistory(
+                updatedProfile.getEatingDisorderHistory()
         );
 
         return healthProfileRepo.save(existingProfile);
-        
     }
 
+    public void delete(Long id) {
+        healthProfileRepo.deleteById(id);
+    }
 }

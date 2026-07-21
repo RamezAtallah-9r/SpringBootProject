@@ -74,6 +74,11 @@ public class HealthProfile {
 	@DecimalMin(value = "30.0", message = "Weight must be at least 30 kg.")
 	@DecimalMax(value = "300.0", message = "Weight cannot exceed 300 kg.")
 	private Double currentWeight;
+	
+	@NotNull(message = "Target weight is required")
+	@DecimalMin(value = "25.0", message = "Minimum target weight is 25 kg")
+	@DecimalMax(value = "400.0", message = "Maximum target weight is 400 kg")
+	private Double targetWeight;	
 
 	@NotBlank(message = "Activity level is required")
 	private String activityLevel;
@@ -81,47 +86,39 @@ public class HealthProfile {
 	@NotBlank(message = "Occupation is required")
 	private String occupation;
 
-	@NotBlank(message = "City is required")
-	private String city;
 
 	@NotNull(message = "Work start time is required")
-	private LocalTime workStart;
+	private LocalTime workStart = LocalTime.of(9, 0); // 09:00 AM
 
 	@NotNull(message = "Work end time is required")
-	private LocalTime workEnd;
+	private LocalTime workEnd = LocalTime.of(17, 0); // 05:00 PM
 
 	@NotNull(message = "Bedtime is required")
-	private LocalTime bedtime;
+	private LocalTime bedtime = LocalTime.of(23, 0); // 11:00 PM
 
 	@NotNull(message = "Wake-up time is required")
-	private LocalTime wakeUpTime;
+	private LocalTime wakeUpTime = LocalTime.of(7, 0); // 07:00 AM
 
 	// Page 6: Medical
 
-	@NotBlank(message = "Pregnancy status is required")
-	private String pregnancyStatus;
+    @Column(columnDefinition = "TEXT")
+    private String conditions;
 
-	@NotBlank(message = "Write allergies or write None")
-	@Column(columnDefinition = "TEXT")
-	private String dietaryAllergies;
+    @Column(columnDefinition = "TEXT")
+    private String allergies;
 
-	@NotBlank(message = "Write conditions or write None")
-	@Column(columnDefinition = "TEXT")
-	private String chronicDiseases;
+    @Column(columnDefinition = "TEXT")
+    private String medications;
 
-	private boolean strictHardBlock;
+    private Boolean pregnant = false;
+
+    private Boolean eatingDisorderHistory = false;
 
 	// Page 7: Goals
 
-	@NotBlank(message = "Primary goal is required")
-	private String primaryGoal;
+    private String inBodyFileName;
 
-	@NotNull(message = "Target weight is required")
-	@DecimalMin(value = "25.0", message = "Minimum target weight is 25 kg")
-	@DecimalMax(value = "400.0", message = "Maximum target weight is 400 kg")
-	private Double targetWeight;
-
-	private String inBodyFileName;
+    private String inBodyFilePath;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -132,9 +129,8 @@ public class HealthProfile {
 	public HealthProfile() {
 
 	}
-	
-	//Getters & Setters
-	
+
+	// Getters & Setters
 
 	@Transient
 	private MultipartFile inBodyFile;
@@ -151,13 +147,9 @@ public class HealthProfile {
 		return createdAt;
 	}
 
-
-
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
-
-
 
 	@PrePersist
 	protected void onCreate() {
@@ -201,10 +193,6 @@ public class HealthProfile {
 		return occupation;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
 	public LocalTime getWorkStart() {
 		return workStart;
 	}
@@ -221,25 +209,6 @@ public class HealthProfile {
 		return wakeUpTime;
 	}
 
-	public String getPregnancyStatus() {
-		return pregnancyStatus;
-	}
-
-	public String getDietaryAllergies() {
-		return dietaryAllergies;
-	}
-
-	public String getChronicDiseases() {
-		return chronicDiseases;
-	}
-
-	public boolean isStrictHardBlock() {
-		return strictHardBlock;
-	}
-
-	public String getPrimaryGoal() {
-		return primaryGoal;
-	}
 
 	public Double getTargetWeight() {
 		return targetWeight;
@@ -259,6 +228,55 @@ public class HealthProfile {
 
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+	
+
+	public String getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(String conditions) {
+		this.conditions = conditions;
+	}
+
+	public String getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	public String getMedications() {
+		return medications;
+	}
+
+	public void setMedications(String medications) {
+		this.medications = medications;
+	}
+
+	public Boolean getPregnant() {
+		return pregnant;
+	}
+
+	public void setPregnant(Boolean pregnant) {
+		this.pregnant = pregnant;
+	}
+
+	public Boolean getEatingDisorderHistory() {
+		return eatingDisorderHistory;
+	}
+
+	public void setEatingDisorderHistory(Boolean eatingDisorderHistory) {
+		this.eatingDisorderHistory = eatingDisorderHistory;
+	}
+
+	public String getInBodyFilePath() {
+		return inBodyFilePath;
+	}
+
+	public void setInBodyFilePath(String inBodyFilePath) {
+		this.inBodyFilePath = inBodyFilePath;
 	}
 
 	public void setBloodType(String bloodType) {
@@ -285,9 +303,6 @@ public class HealthProfile {
 		this.occupation = occupation;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
-	}
 
 	public void setWorkStart(LocalTime workStart) {
 		this.workStart = workStart;
@@ -305,25 +320,6 @@ public class HealthProfile {
 		this.wakeUpTime = wakeUpTime;
 	}
 
-	public void setPregnancyStatus(String pregnancyStatus) {
-		this.pregnancyStatus = pregnancyStatus;
-	}
-
-	public void setDietaryAllergies(String dietaryAllergies) {
-		this.dietaryAllergies = dietaryAllergies;
-	}
-
-	public void setChronicDiseases(String chronicDiseases) {
-		this.chronicDiseases = chronicDiseases;
-	}
-
-	public void setStrictHardBlock(boolean strictHardBlock) {
-		this.strictHardBlock = strictHardBlock;
-	}
-
-	public void setPrimaryGoal(String primaryGoal) {
-		this.primaryGoal = primaryGoal;
-	}
 
 	public void setTargetWeight(Double targetWeight) {
 		this.targetWeight = targetWeight;
