@@ -45,9 +45,9 @@
     html { scroll-behavior: smooth; }
     body {
       background:
-        radial-gradient(circle at 10% 0%, rgba(39, 158, 255, .10), transparent 30rem),
-        radial-gradient(circle at 95% 15%, rgba(3, 201, 136, .08), transparent 28rem),
-        #f8fbff;
+              radial-gradient(circle at 10% 0%, rgba(39, 158, 255, .10), transparent 30rem),
+              radial-gradient(circle at 95% 15%, rgba(3, 201, 136, .08), transparent 28rem),
+              #f8fbff;
       color: #0f172a;
     }
     .glass {
@@ -128,251 +128,274 @@
 
 </head>
 <body class="min-h-screen antialiased">
-  <c:if test="${not empty successMessage}">
-    <div class="mx-auto mt-5 max-w-5xl rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 font-bold text-emerald-800">${successMessage}</div>
-  </c:if>
-  <c:if test="${not empty errorMessage}">
-    <div class="mx-auto mt-5 max-w-5xl rounded-2xl border border-red-200 bg-red-50 px-5 py-4 font-bold text-red-700">${errorMessage}</div>
-  </c:if>
+<c:if test="${not empty successMessage}">
+  <div class="mx-auto mt-5 max-w-5xl rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 font-bold text-emerald-800">${successMessage}</div>
+</c:if>
+<c:if test="${not empty errorMessage}">
+  <div class="mx-auto mt-5 max-w-5xl rounded-2xl border border-red-200 bg-red-50 px-5 py-4 font-bold text-red-700">${errorMessage}</div>
+</c:if>
 
 
-  <!-- Unified application navigation. This block is intentionally duplicated in every page. -->
-  <header class="glass sticky top-0 z-50 border-b border-slate-200/70">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-      <a href="<c:url value='/' />" class="flex items-center gap-3" aria-label="LifeBeacon home">
+<!-- Unified application navigation. This block is intentionally duplicated in every page. -->
+<header class="glass sticky top-0 z-50 border-b border-slate-200/70">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+    <a href="<c:url value='/' />" class="flex items-center gap-3" aria-label="LifeBeacon home">
         <span class="grid h-11 w-11 place-items-center rounded-2xl bg-beacon-navy text-white shadow-soft">
           <i data-lucide="heart-pulse" class="h-6 w-6"></i>
         </span>
-        <span class="text-xl font-black tracking-tight text-beacon-navy">
+      <span class="text-xl font-black tracking-tight text-beacon-navy">
           <span class="text-beacon-green">Life</span>Beacon
         </span>
-      </a>
+    </a>
 
-      <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
-        <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/dashboard' />">Today</a>
-        <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/inbody' />">InBody</a>
-        <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/group-meal' />">MealCircle</a>
-        <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/profile' />">Profile</a>
-      </nav>
-
-      <div class="hidden items-center gap-3 lg:flex">
-        <button class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white text-beacon-navy" aria-label="Notifications">
-          <i data-lucide="bell" class="h-5 w-5"></i>
-        </button>
-        <a href="<c:url value='/auth' />" class="btn btn-secondary">Sign out</a>
-      </div>
-
-      <button id="mobileMenuButton" class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white lg:hidden" aria-label="Open menu" aria-expanded="false">
-        <i data-lucide="menu" class="h-5 w-5"></i>
-      </button>
-    </div>
-
-    <nav id="mobileMenu" class="hidden border-t border-slate-200 bg-white px-5 py-4 lg:hidden" aria-label="Mobile navigation">
-      <div class="grid gap-2">
-        <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/dashboard' />">Today</a>
-        <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/inbody' />">InBody</a>
-        <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/group-meal' />">MealCircle</a>
-        <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/profile' />">Profile</a>
-        <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/auth' />">Sign out</a>
-      </div>
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+      <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/dashboard' />">Today</a>
+      <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/inbody' />">InBody</a>
+      <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/group-meal' />">MealCircle</a>
+      <a class="nav-link rounded-xl px-4 py-2" href="<c:url value='/profile' />">Profile</a>
     </nav>
-  </header>
 
-
-  <main class="mx-auto max-w-7xl px-5 py-10">
-    <!-- Page greeting -->
-    <section class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-      <div>
-        <p class="font-extrabold text-beacon-green">Good morning, Murad 👋</p>
-        <h1 class="mt-2 text-4xl font-black text-beacon-navy">Your wellness day</h1>
-        <p class="mt-3 text-slate-500">Focus on the next useful step, not perfect execution.</p>
-      </div>
-      <button id="regeneratePlan" class="btn btn-primary" type="button"><i data-lucide="refresh-cw" class="h-5 w-5"></i> Regenerate today's plan</button>
-    </section>
-
-    <!-- Friendly status message -->
-    <div id="statusAlert" data-alert class="mt-7 flex items-start justify-between gap-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-800">
-      <div class="flex gap-3"><i data-lucide="sparkles" class="mt-0.5 h-5 w-5 shrink-0"></i><p><b>Your plan is ready.</b> It reflects your schedule, goal, and declared health context.</p></div>
-      <button data-dismiss aria-label="Dismiss message"><i data-lucide="x" class="h-5 w-5"></i></button>
+    <div class="hidden items-center gap-3 lg:flex">
+      <button class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white text-beacon-navy" aria-label="Notifications">
+        <i data-lucide="bell" class="h-5 w-5"></i>
+      </button>
+      <a href="<c:url value='/auth' />" class="btn btn-secondary">Sign out</a>
     </div>
 
-    <!-- Summary cards -->
-    <section class="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <article class="card p-5">
-        <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 text-orange-500"><i data-lucide="flame"></i></span><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">On target</span></div>
-        <p class="mt-5 text-sm font-bold text-slate-500">Daily calories</p><b class="mt-1 block text-2xl text-beacon-navy">2,120 kcal</b>
-      </article>
-      <article class="card p-5">
-        <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="droplets"></i></span><span class="text-xs font-bold text-slate-400">0.8 / 2.5 L</span></div>
-        <p class="mt-5 text-sm font-bold text-slate-500">Water goal</p><b class="mt-1 block text-2xl text-beacon-navy">32% complete</b>
-      </article>
-      <article class="card p-5">
-        <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-500"><i data-lucide="target"></i></span><span class="text-xs font-bold text-slate-400">Primary goal</span></div>
-        <p class="mt-5 text-sm font-bold text-slate-500">Current focus</p><b class="mt-1 block text-2xl text-beacon-navy">Lose fat safely</b>
-      </article>
-      <article class="card p-5">
-        <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="circle-check-big"></i></span><span class="text-xs font-bold text-slate-400">2 of 7</span></div>
-        <p class="mt-5 text-sm font-bold text-slate-500">Today's progress</p><b id="progressValue" class="mt-1 block text-2xl text-beacon-green">29%</b>
-      </article>
-    </section>
+    <button id="mobileMenuButton" class="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white lg:hidden" aria-label="Open menu" aria-expanded="false">
+      <i data-lucide="menu" class="h-5 w-5"></i>
+    </button>
+  </div>
 
-    <section class="mt-7 grid gap-6 lg:grid-cols-[1.6fr_.8fr]">
-      <!-- Daily timeline -->
-      <article class="card p-6 sm:p-7">
-        <div class="flex items-center justify-between">
-          <div><p class="text-sm font-extrabold text-beacon-green">AI-generated roadmap</p><h2 class="mt-1 text-2xl font-black text-beacon-navy">Today's plan</h2></div>
-          <span class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500">Sunday, July 20</span>
-        </div>
-
-        <div id="planList" class="mt-6 space-y-3">
-          <!-- Each row can later be generated by JSTL from the Spring model. -->
-          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center" data-complete="true">
-            <span class="w-16 text-sm font-black text-beacon-green">08:00</span>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-orange-50 text-orange-500"><i data-lucide="coffee"></i></span>
-            <div class="min-w-0 flex-1"><b class="text-beacon-navy">Balanced breakfast</b><p class="mt-1 text-sm text-slate-500">Eggs, whole-grain bread, cucumber · 460 kcal</p></div>
-            <button class="complete-button btn btn-success py-2 text-sm" type="button"><i data-lucide="check" class="h-4 w-4"></i> Done</button>
-          </div>
-          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center" data-complete="true">
-            <span class="w-16 text-sm font-black text-beacon-green">10:30</span>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-beacon-green"><i data-lucide="glass-water"></i></span>
-            <div class="min-w-0 flex-1"><b class="text-beacon-navy">Hydration break</b><p class="mt-1 text-sm text-slate-500">Drink 500 ml water</p></div>
-            <button class="complete-button btn btn-success py-2 text-sm" type="button"><i data-lucide="check" class="h-4 w-4"></i> Done</button>
-          </div>
-          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center" data-complete="false">
-            <span class="w-16 text-sm font-black text-beacon-green">13:30</span>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-beacon-green"><i data-lucide="utensils"></i></span>
-            <div class="min-w-0 flex-1"><b class="text-beacon-navy">Local healthy lunch</b><p class="mt-1 text-sm text-slate-500">Grilled chicken, rice, and salad · 650 kcal</p></div>
-            <button class="complete-button btn btn-secondary py-2 text-sm" type="button">Mark done</button>
-          </div>
-          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center" data-complete="false">
-            <span class="w-16 text-sm font-black text-beacon-green">17:30</span>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-500"><i data-lucide="footprints"></i></span>
-            <div class="min-w-0 flex-1"><b class="text-beacon-navy">Brisk walk</b><p class="mt-1 text-sm text-slate-500">30 minutes · moderate pace</p></div>
-            <button class="complete-button btn btn-secondary py-2 text-sm" type="button">Mark done</button>
-          </div>
-          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center" data-complete="false">
-            <span class="w-16 text-sm font-black text-beacon-green">20:00</span>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-500"><i data-lucide="moon-star"></i></span>
-            <div class="min-w-0 flex-1"><b class="text-beacon-navy">Light dinner</b><p class="mt-1 text-sm text-slate-500">Lentil soup and side salad · 420 kcal</p></div>
-            <button class="complete-button btn btn-secondary py-2 text-sm" type="button">Mark done</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Supportive side cards -->
-      <aside class="space-y-6">
-        <article class="card p-6">
-          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="sparkles"></i></span>
-          <h2 class="mt-5 text-xl font-black text-beacon-navy">Your beacon</h2>
-          <p class="mt-3 leading-7 text-slate-500">Consistency matters more than perfection. Complete the next useful step.</p>
-        </article>
-
-        <article class="card bg-beacon-navy p-6 text-white">
-          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-beacon-green"><i data-lucide="shield-check"></i></span>
-          <h2 class="mt-5 text-xl font-black">Safety first</h2>
-          <p class="mt-3 leading-7 text-emerald-100">Declared allergies are always treated as hard restrictions.</p>
-        </article>
-
-        <article class="card p-6">
-          <div class="flex items-center justify-between"><h2 class="text-xl font-black text-beacon-navy">Weekly trend</h2><span class="text-sm font-bold text-beacon-green">+6%</span></div>
-          <div class="mt-5 flex h-28 items-end gap-2">
-            <span class="flex-1 rounded-t-lg bg-blue-100" style="height:35%"></span><span class="flex-1 rounded-t-lg bg-blue-200" style="height:50%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/50" style="height:43%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/60" style="height:67%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/70" style="height:58%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/70" style="height:78%"></span><span class="flex-1 rounded-t-lg bg-beacon-green" style="height:88%"></span>
-          </div>
-        </article>
-      </aside>
-    </section>
-  </main>
-
-
-  <!-- Unified footer -->
-  <footer class="mt-20 border-t border-slate-200 bg-white/70">
-    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-      <p>© 2026 LifeBeacon. Wellness support, not medical diagnosis.</p>
-      <div class="flex gap-5">
-        <a href="#" class="hover:text-beacon-navy">Privacy</a>
-        <a href="#" class="hover:text-beacon-navy">Terms</a>
-        <a href="#" class="hover:text-beacon-navy">Support</a>
-      </div>
+  <nav id="mobileMenu" class="hidden border-t border-slate-200 bg-white px-5 py-4 lg:hidden" aria-label="Mobile navigation">
+    <div class="grid gap-2">
+      <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/dashboard' />">Today</a>
+      <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/inbody' />">InBody</a>
+      <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/group-meal' />">MealCircle</a>
+      <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/profile' />">Profile</a>
+      <a class="nav-link rounded-xl px-4 py-3" href="<c:url value='/auth' />">Sign out</a>
     </div>
-  </footer>
+  </nav>
+</header>
 
 
-  <!-- Page JavaScript. It is intentionally kept in this HTML file. -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Render Lucide icons after the page is loaded.
-      if (window.lucide) {
-        lucide.createIcons();
-      }
+<main class="mx-auto max-w-7xl px-5 py-10">
+  <!-- Page greeting -->
+  <section class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+    <div>
+      <p class="font-extrabold text-beacon-green">Good morning, ${user.name} 👋</p>
+      <h1 class="mt-2 text-4xl font-black text-beacon-navy">Your wellness day</h1>
+      <p class="mt-3 text-slate-500">Focus on the next useful step, not perfect execution.</p>
+    </div>
+    <button id="regeneratePlan" class="btn btn-primary" type="button"><i data-lucide="refresh-cw" class="h-5 w-5"></i> Regenerate today's plan</button>
+  </section>
 
-      // Responsive mobile navigation.
-      const menuButton = document.getElementById("mobileMenuButton");
-      const mobileMenu = document.getElementById("mobileMenu");
+  <!-- Friendly status message -->
+  <div id="statusAlert" data-alert class="mt-7 flex items-start justify-between gap-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-800">
+    <div class="flex gap-3"><i data-lucide="sparkles" class="mt-0.5 h-5 w-5 shrink-0"></i><p><b>Your plan is ready.</b> It reflects your schedule, goal, and declared health context.</p></div>
+    <button data-dismiss aria-label="Dismiss message"><i data-lucide="x" class="h-5 w-5"></i></button>
+  </div>
 
-      if (menuButton && mobileMenu) {
-        menuButton.addEventListener("click", () => {
-          const isHidden = mobileMenu.classList.toggle("hidden");
-          menuButton.setAttribute("aria-expanded", String(!isHidden));
-        });
-      }
+  <!-- Summary cards -->
+  <section class="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <article class="card p-5">
+      <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 text-orange-500"><i data-lucide="flame"></i></span><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">On target</span></div>
+      <p class="mt-5 text-sm font-bold text-slate-500">Daily calories</p><b class="mt-1 block text-2xl text-beacon-navy">${roadmap.targetKcal} kcal</b>
+    </article>
+    <article class="card p-5">
+      <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="droplets"></i></span><span class="text-xs font-bold text-slate-400">${waterConsumedMl / 1000.0} / ${roadmap.targetWaterMl / 1000.0} L</span></div>
+      <p class="mt-5 text-sm font-bold text-slate-500">Water goal</p>
+      <b class="mt-1 block text-2xl text-beacon-navy">
+        <c:set var="waterPercent" value="${roadmap.targetWaterMl > 0 ? (waterConsumedMl * 100 / roadmap.targetWaterMl) : 0}" />
+        ${waterPercent}% complete
+      </b>
+    </article>
+    <article class="card p-5">
+      <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-500"><i data-lucide="target"></i></span><span class="text-xs font-bold text-slate-400">Primary goal</span></div>
+      <p class="mt-5 text-sm font-bold text-slate-500">Current focus</p>
+      <!-- NOTE: HealthProfile no longer has a primaryGoal field -
+           this stays a placeholder until the team decides how
+           goals are tracked (see chat notes). -->
+      <b class="mt-1 block text-2xl text-beacon-navy">Lose fat safely</b>
+    </article>
+    <article class="card p-5">
+      <div class="flex items-center justify-between"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="circle-check-big"></i></span><span class="text-xs font-bold text-slate-400">${doneCount} of ${totalCount}</span></div>
+      <p class="mt-5 text-sm font-bold text-slate-500">Today's progress</p>
+      <b id="progressValue" class="mt-1 block text-2xl text-beacon-green">
+        <c:set var="overallPercent" value="${totalCount > 0 ? (doneCount * 100 / totalCount) : 0}" />
+        ${overallPercent}%
+      </b>
+    </article>
+  </section>
 
-      // Highlight the current navigation link using the current file name.
-      const currentPage = window.location.pathname.replace(/\/$/, "") || "/";
-      document.querySelectorAll("a.nav-link").forEach((link) => {
-        const linkPage = new URL(link.href, window.location.origin).pathname.replace(/\/$/, "") || "/";
-        if (linkPage === currentPage) {
-          link.classList.add("active");
-          link.setAttribute("aria-current", "page");
-        }
+  <section class="mt-7 grid gap-6 lg:grid-cols-[1.6fr_.8fr]">
+    <!-- Daily timeline -->
+    <article class="card p-6 sm:p-7">
+      <div class="flex items-center justify-between">
+        <div><p class="text-sm font-extrabold text-beacon-green">AI-generated roadmap</p><h2 class="mt-1 text-2xl font-black text-beacon-navy">Today's plan</h2></div>
+        <span class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500">${today}</span>
+      </div>
+
+      <div id="planList" class="mt-6 space-y-3">
+        <c:forEach var="item" items="${roadmap.items}">
+          <div class="plan-item flex flex-col gap-4 rounded-2xl border border-slate-200 p-4 sm:flex-row sm:items-center"
+               data-complete="${item.status == 'DONE'}" data-item-id="${item.id}">
+            <span class="w-16 text-sm font-black text-beacon-green">${item.scheduledTime}</span>
+            <div class="min-w-0 flex-1">
+              <b class="text-beacon-navy">
+                <c:choose>
+                  <c:when test="${item.category == 'MEAL'}">${item.slot}</c:when>
+                  <c:when test="${item.category == 'WATER'}">Hydration break</c:when>
+                  <c:when test="${item.category == 'WORKOUT'}">${item.activityType}</c:when>
+                  <c:otherwise>${item.category}</c:otherwise>
+                </c:choose>
+              </b>
+              <p class="mt-1 text-sm text-slate-500">
+                <c:choose>
+                  <c:when test="${item.category == 'MEAL'}">
+                    ${item.itemsText} <c:if test="${item.kcal != null}"> · ${item.kcal} kcal</c:if>
+                  </c:when>
+                  <c:when test="${item.category == 'WATER'}">
+                    Drink ${item.amountMl} ml water
+                  </c:when>
+                  <c:when test="${item.category == 'WORKOUT'}">
+                    ${item.durationOrReps}
+                  </c:when>
+                </c:choose>
+              </p>
+            </div>
+            <c:choose>
+              <c:when test="${item.status == 'DONE'}">
+                <button class="complete-button btn btn-success py-2 text-sm" type="button">
+                  <i data-lucide="check" class="h-4 w-4"></i> Done
+                </button>
+              </c:when>
+              <c:otherwise>
+                <button class="complete-button btn btn-secondary py-2 text-sm" type="button">Mark done</button>
+              </c:otherwise>
+            </c:choose>
+          </div>
+        </c:forEach>
+      </div>
+    </article>
+
+    <!-- Supportive side cards -->
+    <aside class="space-y-6">
+      <article class="card p-6">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-beacon-green"><i data-lucide="sparkles"></i></span>
+        <h2 class="mt-5 text-xl font-black text-beacon-navy">Your beacon</h2>
+        <p class="mt-3 leading-7 text-slate-500">Consistency matters more than perfection. Complete the next useful step.</p>
+      </article>
+
+      <article class="card bg-beacon-navy p-6 text-white">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-beacon-green"><i data-lucide="shield-check"></i></span>
+        <h2 class="mt-5 text-xl font-black">Safety first</h2>
+        <p class="mt-3 leading-7 text-emerald-100">Declared allergies are always treated as hard restrictions.</p>
+      </article>
+
+      <article class="card p-6">
+        <div class="flex items-center justify-between"><h2 class="text-xl font-black text-beacon-navy">Weekly trend</h2><span class="text-sm font-bold text-beacon-green">+6%</span></div>
+        <div class="mt-5 flex h-28 items-end gap-2">
+          <span class="flex-1 rounded-t-lg bg-blue-100" style="height:35%"></span><span class="flex-1 rounded-t-lg bg-blue-200" style="height:50%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/50" style="height:43%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/60" style="height:67%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/70" style="height:58%"></span><span class="flex-1 rounded-t-lg bg-beacon-green/70" style="height:78%"></span><span class="flex-1 rounded-t-lg bg-beacon-green" style="height:88%"></span>
+        </div>
+      </article>
+    </aside>
+  </section>
+</main>
+
+
+<!-- Unified footer -->
+<footer class="mt-20 border-t border-slate-200 bg-white/70">
+  <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+    <p>© 2026 LifeBeacon. Wellness support, not medical diagnosis.</p>
+    <div class="flex gap-5">
+      <a href="#" class="hover:text-beacon-navy">Privacy</a>
+      <a href="#" class="hover:text-beacon-navy">Terms</a>
+      <a href="#" class="hover:text-beacon-navy">Support</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Page JavaScript. It is intentionally kept in this HTML file. -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Render Lucide icons after the page is loaded.
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    // Responsive mobile navigation.
+    const menuButton = document.getElementById("mobileMenuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener("click", () => {
+        const isHidden = mobileMenu.classList.toggle("hidden");
+        menuButton.setAttribute("aria-expanded", String(!isHidden));
       });
+    }
 
-      // Close dismissible messages.
-      document.querySelectorAll("[data-dismiss]").forEach((button) => {
-        button.addEventListener("click", () => {
-          button.closest("[data-alert]")?.remove();
-        });
+    // Highlight the current navigation link using the current file name.
+    const currentPage = window.location.pathname.replace(/\/$/, "") || "/";
+    document.querySelectorAll("a.nav-link").forEach((link) => {
+      const linkPage = new URL(link.href, window.location.origin).pathname.replace(/\/$/, "") || "/";
+      if (linkPage === currentPage) {
+        link.classList.add("active");
+        link.setAttribute("aria-current", "page");
+      }
+    });
+
+    // Close dismissible messages.
+    document.querySelectorAll("[data-dismiss]").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.closest("[data-alert]")?.remove();
       });
     });
-  </script>
+  });
+</script>
 
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const buttons = document.querySelectorAll(".complete-button");
-      const progressValue = document.getElementById("progressValue");
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".complete-button");
+    const progressValue = document.getElementById("progressValue");
 
-      function updateProgress() {
-        const items = [...document.querySelectorAll(".plan-item")];
-        const completeCount = items.filter(item => item.dataset.complete === "true").length;
-        const progress = Math.round((completeCount / items.length) * 100);
-        progressValue.textContent = `${progress}%`;
-      }
+    function updateProgress() {
+      const items = [...document.querySelectorAll(".plan-item")];
+      const completeCount = items.filter(item => item.dataset.complete === "true").length;
+      const progress = Math.round((completeCount / items.length) * 100);
+      progressValue.textContent = `${progress}%`;
+    }
 
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const item = button.closest(".plan-item");
-          const isComplete = item.dataset.complete === "true";
-          item.dataset.complete = String(!isComplete);
-          button.className = `complete-button btn py-2 text-sm ${!isComplete ? "btn-success" : "btn-secondary"}`;
-          button.innerHTML = !isComplete ? '<i data-lucide="check" class="h-4 w-4"></i> Done' : "Mark done";
-          lucide.createIcons();
-          updateProgress();
-        });
-      });
-
-      document.getElementById("regeneratePlan").addEventListener("click", (event) => {
-        const button = event.currentTarget;
-        button.disabled = true;
-        button.innerHTML = '<i data-lucide="loader-circle" class="h-5 w-5 animate-spin"></i> Generating...';
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const item = button.closest(".plan-item");
+        const isComplete = item.dataset.complete === "true";
+        item.dataset.complete = String(!isComplete);
+        button.className = `complete-button btn py-2 text-sm ${!isComplete ? "btn-success" : "btn-secondary"}`;
+        button.innerHTML = !isComplete ? '<i data-lucide="check" class="h-4 w-4"></i> Done' : "Mark done";
         lucide.createIcons();
-        setTimeout(() => {
-          button.disabled = false;
-          button.innerHTML = '<i data-lucide="refresh-cw" class="h-5 w-5"></i> Regenerate today\'s plan';
-          lucide.createIcons();
-        }, 1400);
+        updateProgress();
+        // NOTE: this only updates the page visually right now -
+        // it does not save to the database yet. Refreshing the
+        // page will reset progress to whatever's actually stored.
       });
     });
-  </script>
+
+    document.getElementById("regeneratePlan").addEventListener("click", (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.innerHTML = '<i data-lucide="loader-circle" class="h-5 w-5 animate-spin"></i> Generating...';
+      lucide.createIcons();
+      setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = '<i data-lucide="refresh-cw" class="h-5 w-5"></i> Regenerate today\'s plan';
+        lucide.createIcons();
+      }, 1400);
+    });
+  });
+</script>
 
 </body>
 </html>
