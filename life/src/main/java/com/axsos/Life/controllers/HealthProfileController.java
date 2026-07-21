@@ -1,6 +1,7 @@
 package com.axsos.Life.controllers;
 
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.nio.file.*;
@@ -24,8 +25,10 @@ public class HealthProfileController {
 	    }
 
 	    @GetMapping
-	    public String onboarding(Model model) {
-
+	    public String onboarding(Model model,HttpSession session) {
+	    	 if (session.getAttribute("userId") == null) {
+	             return "redirect:/auth";
+	         }
 	        model.addAttribute(
 	            "healthProfile",
 	            new HealthProfile()

@@ -18,7 +18,10 @@ import java.security.SecureRandom;
 // this class, so NONE of these mappings or @Autowired fields would work.
 @Controller
 public class MainController {
-
-	
+	@GetMapping("/")
+	public String index() {
+		
+		return "index";
+	}
 }
 
