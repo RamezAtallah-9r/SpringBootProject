@@ -1,7 +1,6 @@
 package com.axsos.Life.services;
 
 import org.springframework.stereotype.Service;
-
 import com.axsos.Life.models.*;
 
 import java.time.LocalDate;
@@ -19,35 +18,35 @@ public class RoadmapEngineService {
 
     private final HealthProfileService healthProfileService;
     private final InBodyReportService inBodyReportService;
-    private final HealthProfileService healthTagService;
     private final RoadmapService roadmapService;
     private final RoadmapItemService roadmapItemService;
     private final GeminiClient geminiClient;
 
     public RoadmapEngineService(HealthProfileService healthProfileService,
-                                 InBodyReportService inBodyReportService,
-                                 HealthProfileService healthTagService,
-                                 RoadmapService roadmapService,
-                                 RoadmapItemService roadmapItemService,
-                                 GeminiClient geminiClient) {
+                                InBodyReportService inBodyReportService,
+                                RoadmapService roadmapService,
+                                RoadmapItemService roadmapItemService,
+                                GeminiClient geminiClient) {
         this.healthProfileService = healthProfileService;
         this.inBodyReportService = inBodyReportService;
-        this.healthTagService = healthTagService;
         this.roadmapService = roadmapService;
         this.roadmapItemService = roadmapItemService;
         this.geminiClient = geminiClient;
     }
 
     public Roadmap generate(User user, String triggerSource) {
-        HealthProfile profile = healthProfileService.getByUserId(user.getId())
-                .orElseThrow(() -> new IllegalStateException("Onboarding not complete for user " + user.getId()));
+        // HealthProfileService returns a plain HealthProfile (or null),
+        // not an Optional - so we null-check instead of orElseThrow.
+        HealthProfile profile = healthProfileService.findByUserId(user.getId());
+        if (profile == null) {
+            throw new IllegalStateException("Onboarding not complete for user " + user.getId());
+        }
 
         Optional<InBodyReport> latestInBody = inBodyReportService.getLatestForUser(user.getId());
-        List<HealthTag> tags = healthTagService.getAllForUser(user.getId());
         List<Roadmap> recentHistory = roadmapService.getRecentHistory(user.getId());
 
         // ---------- 1. SEND: build the prompt ----------
-        String prompt = buildPrompt(user, profile, tags, latestInBody, recentHistory);
+        String prompt = buildPrompt(user, profile, latestInBody, recentHistory);
 
         // ---------- 2. RECEIVE ----------
         Map<String, Object> aiResult;
@@ -60,17 +59,14 @@ public class RoadmapEngineService {
         }
 
         // ---------- 3. Deterministic safety layer (never skip this) ----------
-        applySafetyRules(aiResult, tags);
+        applySafetyRules(aiResult, profile);
 
         // ---------- 4. SAVE ----------
         return saveRoadmap(user, triggerSource, aiResult);
     }
 
-    private String buildPrompt(User user, HealthProfile profile, List<HealthTag> tags,
-                                Optional<InBodyReport> latestInBody, List<Roadmap> recentHistory) {
-
-        List<String> conditions = tags.stream().filter(t -> t.getType().equals("CONDITION")).map(HealthTag::getName).toList();
-        List<String> medications = tags.stream().filter(t -> t.getType().equals("MEDICATION")).map(HealthTag::getName).toList();
+    private String buildPrompt(User user, HealthProfile profile,
+                               Optional<InBodyReport> latestInBody, List<Roadmap> recentHistory) {
 
         int bmr;
         String dataSource;
@@ -78,7 +74,8 @@ public class RoadmapEngineService {
             bmr = latestInBody.get().getBmr();
             dataSource = "measured by InBody scan";
         } else {
-            bmr = TdeeCalculator.estimateBmr(profile.getWeight(), profile.getHeight(), profile.getAge(), profile.getGender());
+            bmr = TdeeCalculator.estimateBmr(profile.getCurrentWeight(), profile.getHeight(),
+                    profile.getAge(), profile.getGender());
             dataSource = "estimated (Mifflin-St Jeor formula, no InBody report yet)";
         }
 
@@ -94,7 +91,7 @@ public class RoadmapEngineService {
         }
 
         return """
-            You are VitaPath's AI Daily Planning Engine. Generate ONE day's
+            You are Life Beacon's AI Daily Planning Engine. Generate ONE day's
             personalized nutrition and wellness roadmap. Return ONLY a JSON
             object, no other text, no markdown formatting, in exactly this shape:
 
@@ -114,13 +111,13 @@ public class RoadmapEngineService {
             USER CONTEXT:
             - City: %s
             - Height: %s cm, Weight: %s kg, Age: %s, Gender: %s
-            - Activity level: %s
+            - Activity level: %s, Occupation: %s
             - BMR: %d kcal (%s)
-            - Pregnant: %s
-            - Eating disorder history flagged: %s
+            - Pregnancy status: %s
             - Chronic conditions: %s
-            - Current medications: %s
-            - Work hours: %s to %s, Sleep: %s, Wake: %s
+            - Dietary allergies: %s
+            - Primary goal: %s, Target weight: %s kg
+            - Work hours: %s to %s, Bedtime: %s, Wake-up: %s
 
             YESTERDAY'S RESULTS:
             %s
@@ -129,29 +126,38 @@ public class RoadmapEngineService {
             filtering happens separately, after your response, in application code.
             Never set targetKcal below 1200.
             """.formatted(
-                user.getCity(), profile.getHeight(), profile.getWeight(), profile.getAge(), profile.getGender(),
-                profile.getActivityLevel(), bmr, dataSource,
-                profile.isPregnant(), profile.isEatingDisorderFlag(),
-                conditions.isEmpty() ? "none" : String.join(", ", conditions),
-                medications.isEmpty() ? "none" : String.join(", ", medications),
-                profile.getWorkStartTime(), profile.getWorkEndTime(), profile.getSleepTime(), profile.getWakeTime(),
+                profile.getCity(), profile.getHeight(), profile.getCurrentWeight(), profile.getAge(), profile.getGender(),
+                profile.getActivityLevel(), profile.getOccupation(), bmr, dataSource,
+                profile.getPregnancyStatus(),
+                profile.getChronicDiseases(),
+                profile.getDietaryAllergies(),
+                profile.getPrimaryGoal(), profile.getTargetWeight(),
+                profile.getWorkStart(), profile.getWorkEnd(), profile.getBedtime(), profile.getWakeUpTime(),
                 yesterday.toString()
         );
     }
 
-    // The deterministic safety layer - runs on EVERY response,
-    // regardless of what the prompt asked for. This is what makes
-    // the calorie floor and allergy filter guarantees actually true.
+    // The deterministic safety layer - runs on EVERY response, regardless
+    // of what the prompt asked for. Allergies are stored as free text
+    // (e.g. "peanuts, shellfish"), same pattern as RestaurantMeal.allergenTags,
+    // so we split on commas and check each word.
     @SuppressWarnings("unchecked")
-    private void applySafetyRules(Map<String, Object> aiResult, List<HealthTag> tags) {
+    private void applySafetyRules(Map<String, Object> aiResult, HealthProfile profile) {
         Object kcalObj = aiResult.get("targetKcal");
         if (kcalObj != null && ((Number) kcalObj).intValue() < 1200) {
             aiResult.put("targetKcal", 1200);
         }
 
-        List<String> allergens = tags.stream()
-                .filter(t -> t.getType().equals("ALLERGY"))
-                .map(t -> t.getName().toLowerCase())
+        String rawAllergies = profile.getDietaryAllergies();
+        if (rawAllergies == null || rawAllergies.isBlank()
+                || rawAllergies.trim().equalsIgnoreCase("none")) {
+            return;
+        }
+
+        List<String> allergens = Arrays.stream(rawAllergies.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(s -> !s.isEmpty())
                 .toList();
 
         if (allergens.isEmpty()) return;
