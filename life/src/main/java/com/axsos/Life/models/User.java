@@ -1,5 +1,6 @@
 package com.axsos.Life.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,26 +17,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Name - required, 2-60 characters, LETTERS AND SPACES ONLY
     @NotEmpty(message = "Name is required!")
     @Size(min = 2, max = 60, message = "Name must be between 2 and 60 characters")
     @Pattern(regexp = "^[A-Za-z ]+$",
             message = "Name must contain letters only (no numbers or symbols)")
     private String name;
 
-    // Email - valid email format, not blank
     @NotEmpty(message = "Email is required!")
     @Email(message = "Please enter a valid email!")
     private String email;
 
-    // Phone - EXACTLY 10 or 11 digits, numbers only (no +, spaces, or dashes)
+    // NEW: unique = true adds a database-level constraint as a backup
+    // to the Java-side check in UserService, in case two registration
+    // requests happen at the exact same moment.
+    @Column(unique = true)
     @NotEmpty(message = "Phone is required!")
     @Pattern(regexp = "^[0-9]{10,11}$",
             message = "Phone must be 10 or 11 digits (numbers only)")
     private String phone;
 
-    // Password - at least 8 characters, with an uppercase letter,
-    // a lowercase letter, and a numeral
     @NotEmpty(message = "Password is required!")
     @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$",
@@ -47,7 +47,6 @@ public class User {
     @Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
     private String confirm;
 
-    // City - required, letters only (no numbers)
     @NotEmpty(message = "Please select your city!")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "City must contain letters only")
     private String city;
