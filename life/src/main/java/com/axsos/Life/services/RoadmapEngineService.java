@@ -39,7 +39,7 @@ public class RoadmapEngineService {
     }
 
     public Roadmap generate(User user, String triggerSource) {
-        HealthProfile profile = healthProfileService.getByUserId(user.getId())
+        HealthProfile profile = healthProfileService.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalStateException("Onboarding not complete for user " + user.getId()));
 
         Optional<InBodyReport> latestInBody = inBodyReportService.getLatestForUser(user.getId());

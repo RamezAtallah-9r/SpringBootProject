@@ -182,7 +182,7 @@
   <main class="mx-auto max-w-6xl px-5 py-10">
     <section class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
       <div><p class="font-extrabold text-beacon-green">Your account</p><h1 class="mt-2 text-4xl font-black text-beacon-navy">Profile & health context</h1><p class="mt-3 text-slate-500">Review the information used to personalize your daily roadmap.</p></div>
-      <a href="<c:url value='/profile/edit' />" class="btn btn-primary"><i data-lucide="pencil" class="h-5 w-5"></i> Edit profile</a>
+      <a href="<c:url value='/edituserinfprofile' />" class="btn btn-primary"><i data-lucide="pencil" class="h-5 w-5"></i> Edit profile</a>
     </section>
 
     <section class="mt-8 grid gap-6 lg:grid-cols-[.7fr_1.3fr]">

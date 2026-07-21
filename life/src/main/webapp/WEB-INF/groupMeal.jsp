@@ -279,7 +279,7 @@
   </footer>
 
 
-  <!-- Page JavaScript. It is intentionally kept in this HTML file. -->
+  <!-- Page JavaScript -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       // Render Lucide icons after the page is loaded.
@@ -317,7 +317,6 @@
     });
   </script>
 
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const checkboxes = document.querySelectorAll(".mate-checkbox");
@@ -326,7 +325,8 @@
 
       function updateCount() {
         const count = [...checkboxes].filter(box => box.checked).length;
-        countLabel.textContent = `${count} member${count === 1 ? "" : "s"} selected`;
+        // Escaped JS template literal variables so JSP EL ignores them
+        countLabel.textContent = `\${count} member\${count === 1 ? "" : "s"} selected`;
       }
 
       checkboxes.forEach(box => box.addEventListener("change", updateCount));
@@ -337,7 +337,9 @@
         button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i> Request sent';
         button.classList.remove("btn-primary");
         button.classList.add("btn-success");
-        lucide.createIcons();
+        if (window.lucide) {
+          lucide.createIcons();
+        }
       });
 
       document.getElementById("createSession").addEventListener("click", () => {

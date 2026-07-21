@@ -23,5 +23,26 @@ public class MainController {
 		
 		return "index";
 	}
+	
+	@GetMapping("/userinfprofile")
+	public String uip() {
+		
+		return "profile";
+	}
+	@GetMapping("/edituserinfprofile")
+	public String euip() {
+		
+		return "editProfile";
+	}
+	@GetMapping("/inbodypage")
+	public String inbodyd() {
+		
+		return "inbody";
+	}
+	@GetMapping("/mealc")
+	public String mealc() {
+		
+		return "groupMeal";
+	}
 }
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.axsos.Life.models.HealthProfile;
+import com.axsos.Life.models.InBodyReport;
 import com.axsos.Life.repositories.HealthProfileRepository;
 @Service
 public class HealthProfileService {
