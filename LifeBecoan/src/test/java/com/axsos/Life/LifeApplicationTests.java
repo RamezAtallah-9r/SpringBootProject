@@ -1,0 +1,1 @@
+package com.axsos.Life; import org.junit.jupiter.api.Test; class LifeApplicationTests { @Test void projectCompiles(){} }

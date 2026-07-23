@@ -1,0 +1,39 @@
+Life Beacon refactor summary
+============================
+
+Main structural changes
+- Removed dto, util, config, and services/ai packages.
+- Removed AuthInterceptor, WebConfig, SessionUser, GlobalExceptionHandler, and ReferenceDataAdvice.
+- Controllers now use simple HttpSession userId checks.
+- Renamed AuthService to UserService.
+- Renamed RoadmapEngineService to RoadmapService.
+- Replaced GeminiAiClient with one GeminiService.
+- Added HomeController, HealthTagService, and WeightLogService.
+- Moved simple form-binding classes into the models package so no DTO package is used.
+
+Functional changes
+- Secured the Gemini key with GEMINI_API_KEY.
+- Kept one Palestinian city list for registration and edit profile.
+- Added account editing for name, email, phone, and city without changing passwordHash.
+- Added email uniqueness validation that ignores the current user's email.
+- Changed blood type to a dropdown in onboarding and edit profile.
+- Added work duration validation from 1 to 16 hours.
+- Added sleep duration validation from 4 to 14 hours, including overnight schedules.
+- Login failure uses exactly: Email or password is incorrect.
+- InBody validates empty files, extension, MIME type, and 10 MB size before Gemini.
+- InBody rejects unrelated files before saving.
+- Dashboard main-goal output remains limited to 60 characters.
+- MealCircle now requests short structured JSON with one shared meal and one meal per real user.
+- MealCircle includes calories and short reasons, checks cuisine and allergies, and uses real names.
+- Renamed mealcircle-result.jsp to mealcircleResult.jsp to match the requested structure.
+- Removed the development /test-error route.
+
+Verification
+- Checked that no dto, util, config, services/ai, interceptor, ControllerAdvice, or SessionUser references remain.
+- Checked controller view names against JSP filenames.
+- Checked that no Gemini API key is stored in the project.
+- Checked Java source files for balanced braces.
+
+Environment limitation
+- Maven is not installed in this execution environment, so mvn clean test and mvn clean package could not be executed here.
+- Run both commands locally before deployment.
