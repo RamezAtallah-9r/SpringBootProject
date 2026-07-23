@@ -17,7 +17,7 @@ Transforming health data into personalized daily wellness journeys through Artif
 
 </p>
 
-Developed with ❤️ using **Spring Boot, JSP, Hibernate, MySQL, Tailwind CSS and Artificial Intelligence**
+Developed with ❤️ using **Spring Boot, JSP, MySQL, Tailwind CSS and Artificial Intelligence**
 
 </div>
 
@@ -115,7 +115,7 @@ The platform combines intelligent health analysis, nutrition planning, hydration
 JSP Views Services Controllers
             │
             ▼
-      Hibernate / JPA
+           JPA
             │
             ▼
           MySQL
