@@ -1,0 +1,28 @@
+Life Beacon Fix Report
+======================
+
+Fixed onboarding validation:
+- Continue now validates only the current visible step.
+- Height must be between 100 and 250 cm.
+- Age must be between 15 and 100.
+- Current and target weight must be between 30 and 350 kg.
+- Required select and time fields are checked.
+- Work duration must be between 1 and 16 hours and supports overnight work.
+- Sleep duration must be between 4 and 14 hours and supports overnight sleep.
+- Errors display directly below the related input.
+- The first invalid field receives focus.
+- Native alert/reportValidity popups are not used.
+- The final submit validates all required steps again and prevents double submission.
+
+Fixed Gemini connection:
+- Sends the API key using the x-goog-api-key request header.
+- Uses Content-Type application/json.
+- Supports GEMINI_API_KEY and GOOGLE_API_KEY environment variables.
+- Also supports a direct gemini.api.key property for local testing.
+- Increased connection and read timeouts.
+- Logs the exact safe Google API error to the console without exposing the key.
+- Improved JSON code-fence cleanup and empty/blocked-response handling.
+
+Verification limitation:
+- Maven could not be installed because this environment could not resolve external package repositories.
+- Static source checks were completed. Run mvn clean test and mvn clean package locally.

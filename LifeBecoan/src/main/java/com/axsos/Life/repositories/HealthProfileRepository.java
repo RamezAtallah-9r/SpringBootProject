@@ -1,0 +1,1 @@
+package com.axsos.Life.repositories; import org.springframework.data.jpa.repository.JpaRepository; import com.axsos.Life.models.*; import java.util.*; import java.time.*; import static com.axsos.Life.models.Enums.*; public interface HealthProfileRepository extends JpaRepository<HealthProfile,Long> { Optional<HealthProfile> findByUserId(Long userId); }
